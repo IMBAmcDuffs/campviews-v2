@@ -1,6 +1,9 @@
 
 var global = {
-	userData: {}
+	userData: {},
+	apiPath: 'http://nda.campviews.com/api/',
+	accessToken: 'diabetes8',
+	selectedCamp: 0
 }
 
 var cache = {
@@ -28,22 +31,47 @@ var appdb = {
     }
 };
 
-
 var cv = angular.module('campviews', ['ionic', 'campviews.controllers', 'campviews.services']);
 
 cv.config(function($stateProvider, $urlRouterProvider) {
-
+	var def = '/login';
+	// Factory Ajax Calls
+	var getCamps = function(CV_Camps) {
+		var thisCamp = core.getCurrentCamp();
+		if(thisCamp!==0){
+			return CV_Camps.getCamps();
+		}else{
+			dev = '/dashboard';
+		}
+    };
+	
+	var getCamp = function(CV_Camps) {
+        return CV_Camps.getCamp();
+    };
+	
   $urlRouterProvider.otherwise('/login');
 
   $stateProvider
   .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
-    controller: 'LoginCtrl'
+    controller: 'LoginCtrl',	
+  })
+  .state('camps', {
+    url: '/camps',
+    templateUrl: 'templates/camps.html',
+    controller: 'CampsCtrl',
+	require: ['ionList', '^?$ionicScroll'],
+	resolve: { 
+		camps: getCamps
+	}
+  }).state('dashboard', {
+    url: '/dashboard',
+    templateUrl: 'templates/dashboard.html',
+    controller: 'MainCtrl',
   });
   
 });
-
 cv.run(function($ionicPlatform) {
   appdb.initialize();
   

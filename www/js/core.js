@@ -1,35 +1,41 @@
 // Core.js is the listing for the main services and thigns we need to make stuff happen
 var $ = jQuery;
 
+var testData = {
+	user: {
+		name: 'admin',
+		password: 'test',
+		key: 'yes'	
+	}
+}
+ 
 var core = {
-	
-	init: function() {
-		
+	debug: function(data,name){
+		console.log(name, JSON.stringify(data));
 	},
-	
-	ajaxLoader: function(request, data, $method) {
-		$.ajax({
-			url: request,
-			data: data,
-			cache: false,
-			type: $method,
-			success: function(result, status, xhr){
-				cache.requestedData = result;
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				if ($.isFunction(errorCallback)) {
-                    errorCallback();
-                }
-                else {
-                    console.log('crap didnt work!');
-                }
-			}
+	getCurrentCamp: function(){
+		var camp_id = 0;
+		if(global.selectedCamp!==0){
+			camp_id = global.selectedCamp;
+		}else
+		if(localStorage.getItem('selectedCamp')){
+			camp_id = localStorage.getItem('selectedCamp');
+		}
+		
+		return camp_id;
+	},
+	ajaxPost: function($http,req) {
+		$http(req).
+		success(function(data, status, headers, config) {
+			cache.request = data;
+			console.log(data.status);
+			console.log(data.key);
+		}).
+		error(function(data, status, headers, config) {
+			
 		});
 	},
-	
-	return: {
-		init: init,
-		ajaxLoader: ajaxLoader
+	return: { 
+		getCurrentCamp : getCurrentCamp	
 	}
-		
 }

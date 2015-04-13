@@ -3,6 +3,14 @@
 input, select {
 	width:100%;	
 }
+
+img {
+	width:100%;
+	max-width:100%;
+	height:auto;
+	max-height:auto;	
+}
+
 .input-options {
 	width:100%;
 	text-align:center;	
@@ -10,4 +18,41 @@ input, select {
 .input-options input {
 	width:49.5%;	
 	clear:none;
+}
+
+.list_item {
+	float:left;
+	width:30%;
+	margin:15px !important;
+	height:120px;
+	overflow:hidden;
+}
+.list_item_left {
+	float:left;
+	width: 25%;
+}
+.list_item_right {
+	float:left;
+	width:75%;
+}
+.list_item_title, .list_item_dates {
+	float:left;
+	width:100%;
+	padding:0px 15px;
+	padding-top:20px;
+	box-sizing: border-box;
+	font-size:16px;
+	clear:both;
+}
+.list_item_title {
+	font-weight:bolder;	
+}
+.list_item_dates {
+	padding-top:0px;	
+	font-size:14px;
+}
+.list_item_dates span {
+	float:left;
+	width:100%;
+	padding:10px;	
 }
