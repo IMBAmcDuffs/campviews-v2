@@ -1,0 +1,13 @@
+/* Empty. Add your own CSS if you like */
+
+input, select {
+	width:100%;	
+}
+.input-options {
+	width:100%;
+	text-align:center;	
+}
+.input-options input {
+	width:49.5%;	
+	clear:none;
+}
