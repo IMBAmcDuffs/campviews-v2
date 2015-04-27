@@ -30,26 +30,43 @@ var appdb = {
         console.log(error);
     }
 };
+	
+	function getCurrentCamp(){
+		var camp_id = 0;
+		if(global.selectedCamp!==0){
+			camp_id = global.selectedCamp;
+		}else
+		if(localStorage.getItem('selectedCamp')){
+			camp_id = localStorage.getItem('selectedCamp');
+		}
+		
+		return camp_id;
+	}
 
 var cv = angular.module('campviews', ['ionic', 'campviews.controllers', 'campviews.services']);
 
 cv.config(function($stateProvider, $urlRouterProvider) {
 	var def = '/login';
+	
+	if(global.selectedCamp>0 || localStorage.getItem('selectedCamp')){
+		if(global.selectedCamp==0) global.selectedCamp = localStorage.getItem('selectedCamp'); 
+		def = '/dashboard';	
+	}
 	// Factory Ajax Calls
 	var getCamps = function(CV_Camps) {
-		var thisCamp = core.getCurrentCamp();
-		if(thisCamp!==0){
-			return CV_Camps.getCamps();
-		}else{
-			dev = '/dashboard';
-		}
+		return CV_Camps.getCamps();
     };
 	
 	var getCamp = function(CV_Camps) {
         return CV_Camps.getCamp();
     };
 	
-  $urlRouterProvider.otherwise('/login');
+	var getCampers = function(CV_Camps) {
+        return CV_Camps.getCampersFromCamp();
+    };
+	
+	
+  $urlRouterProvider.otherwise(def);
 
   $stateProvider
   .state('login', {
@@ -69,9 +86,28 @@ cv.config(function($stateProvider, $urlRouterProvider) {
     url: '/dashboard',
     templateUrl: 'templates/dashboard.html',
     controller: 'MainCtrl',
-  });
-  
+ 	resolve: { 
+		campData: getCamp,
+	}
+ });
+  	// LEFT OFF HERE -- Need to create multiple views for dashboard
+	/*
+	 - dashboard
+	   - check-in
+		   - campers (maybe this can be integrated into checkin)
+	     - live-checkin
+		 - checkin-camper
+		 - take-photo
+	   - logs
+	     - view-logs (camper_id specific)
+		 - add-edit-log-form
+		 - add-edit-comment-form
+	   - checkout
+	   
+	*/
+
 });
+
 cv.run(function($ionicPlatform) {
   appdb.initialize();
   

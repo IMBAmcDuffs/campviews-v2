@@ -1,14 +1,23 @@
 var cvServ = angular.module('campviews.services', []);
 
+cvServ.service('CV_Camp', ['$http', '$q', '$location', function($http,$q,$location){
+	
+}]);
+
 cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 	var path = global.apiPath+'cv_camp/';
 	
 	function CV_Camps() {
 		var self = this;
 		
+		if(!self.camps)
 		self.camps = null;
 		
+		if(!self.campData)
 		self.campData = null;
+		
+		if(!self.campers)
+		self.campers = null;
 		
 		self.getCamps = function() {
 		var deferred = $q.defer();
@@ -24,14 +33,14 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
-			}
+			} 
 			
 			return deferred.promise;
 		}
-		
+				
 		self.getCamp = function() {
 		var deferred = $q.defer();
-		var camp_id = core.getCurrentCamp();
+		var camp_id = global.selectedCamp;
 		path = path+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id;
 		
 			if(self.campData !== null){ 
@@ -41,6 +50,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 					success(function(data, status, headers, config) {
 						self.campData = data;
 						deferred.resolve(data);
+						
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
@@ -92,7 +102,6 @@ cvServ.factory('CV_Account', ['$http','$location', function($http, $location) {
 	};
 	
 	var check_user = function() {
-		console.log();
 		var $key = localStorage.getItem('user_login');
 		if($key){
 			// add more logic to check the actual key but fo rnow just push forward

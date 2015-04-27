@@ -35,7 +35,4 @@ var core = {
 			
 		});
 	},
-	return: { 
-		getCurrentCamp : getCurrentCamp	
-	}
 }

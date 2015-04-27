@@ -1,8 +1,6 @@
 var cvCont = angular.module('campviews.controllers', []);
 
 cvCont.controller('LoginCtrl', ['$scope', 'CV_Account', function($scope, CV_Account) {
-	console.log('testeres');
-	console.log(localStorage.getItem('user_login'));
 	CV_Account.check();
   $scope.login = function(user) {
 	cache.user = { name: user.name, password: user.password};
@@ -16,7 +14,7 @@ cvCont.controller('LoginCtrl', ['$scope', 'CV_Account', function($scope, CV_Acco
   
 }]);
 
-cvCont.controller('CampsCtrl', ['$scope', '$document', 'CV_Camps', 'camps', function($scope, $document, CV_Camps, camps) {
+cvCont.controller('CampsCtrl', ['$scope', '$document', '$location', 'CV_Camps', 'camps', function($scope, $document, $location, CV_Camps, camps) {
 	console.log(JSON.stringify(camps));
 	 
 	$scope.camps = camps;
@@ -25,12 +23,20 @@ cvCont.controller('CampsCtrl', ['$scope', '$document', 'CV_Camps', 'camps', func
 		
 		global.selectedCamp = camp_id;
 		
+		$location.path('/dashboard');
+		
 	};
 }]);
 
 
 /* main controller unit */
-cvCont.controller('MainCtrl', ['$scope', '$document', 'CV_Camps', 'campData', function($scope, $document, CV_Camps, campData) {
-	console.log(JSON.stringify(campData));
+cvCont.controller('MainCtrl', ['$scope', '$document', 'campData', function($scope, $document, campData) {
+	// set some globals
+	global.camp = campData.camp;
+	global.campers = campData.campers;
+	global.forms = campData.forms;
+	console.log(JSON.stringify(global.camp));
+	console.log(JSON.stringify(global.forms));
+	console.log(JSON.stringify(global.campers));
 	
 }]);
