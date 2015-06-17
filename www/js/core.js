@@ -29,7 +29,9 @@ var core = {
 		success(function(data, status, headers, config) {
 			cache.request = data;
 			console.log(data.status);
+			console.log('ajaxpost - status');
 			console.log(data.key);
+			console.log('ajaxpost - key');
 		}).
 		error(function(data, status, headers, config) {
 			

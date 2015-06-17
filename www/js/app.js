@@ -3,7 +3,8 @@ var global = {
 	userData: {},
 	apiPath: 'http://nda.campviews.com/api/',
 	accessToken: 'diabetes8',
-	selectedCamp: 0
+	selectedCamp: 0,
+	camper: {}
 }
 
 var cache = {
@@ -43,32 +44,50 @@ var appdb = {
 		return camp_id;
 	}
 
-var cv = angular.module('campviews', ['ionic', 'campviews.controllers', 'campviews.services']);
+	
+var cv = angular.module('campviews', ['ionic', 'campviews.controllers', 'campviews.services', 'campviews.filters']);
+
 
 cv.config(function($stateProvider, $urlRouterProvider) {
 	var def = '/login';
-	
+	var $current = localStorage.getItem('user_login');
 	if(global.selectedCamp>0 || localStorage.getItem('selectedCamp')){
-		if(global.selectedCamp==0) global.selectedCamp = localStorage.getItem('selectedCamp'); 
-		def = '/dashboard';	
+		
+		if(global.selectedCamp==0) global.selectedCamp = localStorage.getItem('selectedCamp');
+
+		if( $current ){
+			def = '/dashboard';	
+		}
 	}
 	// Factory Ajax Calls
 	var getCamps = function(CV_Camps) {
 		return CV_Camps.getCamps();
     };
 	
+	var getCheckinForms = function(CV_Forms) {
+        return CV_Forms.getCheckinForms();
+    };
+	
 	var getCamp = function(CV_Camps) {
         return CV_Camps.getCamp();
     };
-	
+		
 	var getCampers = function(CV_Camps) {
         return CV_Camps.getCampersFromCamp();
     };
 	
-	
+	var getCamper = function(CV_Camper,$stateParams) {
+		var camper_id = $stateParams.camper_id;
+		
+		if(!camper_id) return false;
+		
+        return global.camper = CV_Camper.getCamper(camper_id);
+    };
+		
   $urlRouterProvider.otherwise(def);
 
   $stateProvider
+  
   .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
@@ -79,16 +98,53 @@ cv.config(function($stateProvider, $urlRouterProvider) {
     templateUrl: 'templates/camps.html',
     controller: 'CampsCtrl',
 	require: ['ionList', '^?$ionicScroll'],
-	resolve: { 
+  	resolve: { 
 		camps: getCamps
 	}
-  }).state('dashboard', {
-    url: '/dashboard',
-    templateUrl: 'templates/dashboard.html',
-    controller: 'MainCtrl',
- 	resolve: { 
+  }).state('app', {
+	abstract: true,  
+    templateUrl: "templates/menu.html",
+    controller: 'AppCtrl',
+  	resolve: { 
 		campData: getCamp,
+		checkinForms : getCheckinForms,	
 	}
+  }).state('app.dashboard', {
+    url: '/dashboard',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/dashboard.html',	
+			controller: 'MainCtrl',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+ }).state('app.checkin', {
+    url: '/checkin',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/checkin.html',	
+			controller: 'MainCtrl',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.camperSelected', {
+    url: '/checkin/:camper_id',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/checkinForms.html',	
+			controller: 'checkinForms',
+ 		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+ }).state('app.checkinSelected', {
+    url: '/checkin/:camper_id/:form_id',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/checkinForm.html',	
+			controller: 'checkinForm',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
  });
   	// LEFT OFF HERE -- Need to create multiple views for dashboard
 	/*
@@ -108,8 +164,10 @@ cv.config(function($stateProvider, $urlRouterProvider) {
 
 });
 
-cv.run(function($ionicPlatform) {
+cv.run(function($rootScope, $ionicPlatform) {
   appdb.initialize();
+  
+  $rootScope.global = global;
   
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -122,6 +180,8 @@ cv.run(function($ionicPlatform) {
       StatusBar.styleDefault();
     }
   });
-})
+});
+
+
 
 

@@ -1,0 +1,17 @@
+<ion-view view-title="Check In - Form Selected">
+  <ion-content class="padding">
+  	<div class="row">
+    	<div class="col">
+            <div class="checkin_title">
+                <h2 class="sub_title">Checkin Form</h2>
+            </div>
+            
+            <ion-list class="list"> 
+                <ion-item ng-repeat="item in form.fields" class="form_list">
+                    {{ fieldTemplate(item) }}
+                </ion-item>
+            </ion-list>
+        </div>
+     </div>
+  </ion-content>
+</ion-view>

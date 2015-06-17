@@ -1,0 +1,42 @@
+<ion-view view-title="Check In - Camper Selected">
+  <ion-content class="padding">
+  	<div class="row">
+    	<div class="col">
+            <div class="checkin_title">
+                <h2 class="sub_title">Selected : <b> {{ camper.first_name }} {{ camper.last_name }} </b></h2>
+            </div>
+            
+            <div class="row">
+            	<div class="col">
+                	<img ng-src="{{ camper.thumbnail }}" width="100%" />
+                </div>
+                <div class="col col-75">
+                	<ul>
+                    	<li>Date of Birth: <b>{{ camper.dob }}</b></li>
+                    	<li>Gender: <b>{{ camper.gender }}</b></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row">
+            	<button class="col button button-balanced">
+                	Take Photo
+                </button>
+            </div>
+        </div>
+    	<div class="col">
+            <div class="checkin_title">
+                <h2 class="sub_title">Checkin Forms</h2>
+            </div>
+            
+            <ion-list class="row list list-inset"> 
+                <ion-item ng-repeat="item in global.camp.checkin" class="col list_item"  href="#/checkin/{{camper_id}}/{{item.id}}">
+                    <div class="list_item_title">
+                        {{item.name}}
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+     </div>
+  </ion-content>
+</ion-view>
