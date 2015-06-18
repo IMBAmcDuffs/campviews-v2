@@ -1,17 +1,36 @@
-<ion-view view-title="Check In - Form Selected">
+<ion-view view-title="Check In - {{global.camper.first_name}} {{global.camper.last_name}} - {{form.name}} Form Selected">
   <ion-content class="padding">
   	<div class="row">
-    	<div class="col">
+    	<div class="col col-60 padding-horizontal">
             <div class="checkin_title">
-                <h2 class="sub_title">Checkin Form</h2>
+                <h2 class="sub_title">{{form.name}} Form</h2>
             </div>
             
-            <ion-list class="list"> 
-                <ion-item ng-repeat="item in form.fields" class="form_list">
-                    {{ fieldTemplate(item) }}
+            <ion-list> 
+                <ion-item ng-controller="formBuilder" ng-repeat="field in form.fields" class="form_list_item list" id="form_input_{{field.id}}" ng-bind-html="fieldHTML">
+              
+                </ion-item>
+                <ion-item>
+                <button class="button button-block button-positive">
+                  Save Form
+                </button>
                 </ion-item>
             </ion-list>
         </div>
-     </div>
+     	<div class="col-35">
+            <div class="checkin_title">
+                <h4 class="sub_title">Checkin Forms</h4>
+            </div>
+            
+            <ion-list class="row"> 
+                <ion-item ng-repeat="item in global.camp.checkin" class="col padding-vertical item-divider" id="form_{{item.id}}"  href="#/checkin/{{camper_id}}/{{item.id}}">
+                    <div class="list_item_title">
+                        {{item.name}}
+                    </div>
+                </ion-item>
+            </ion-list>
+        </div>
+    </div>
+     
   </ion-content>
 </ion-view>

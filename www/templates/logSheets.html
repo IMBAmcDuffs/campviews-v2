@@ -1,0 +1,17 @@
+<ion-view view-title="Log Sheets - Select Camper">
+  <ion-content class="padding">
+      	<ion-list class="row list list-inset"> 
+            <ion-item ng-repeat="item in global.campers" class="col list_item"  href="#/logsheets/{{item.id}}">
+                <div class="list_item_left">
+                    <img ng-src="{{item.thumbnail}}" />
+                </div>
+                <div class="list_item_right">
+                    <div class="list_item_title">
+                        {{item.first_name}} {{item.last_name}}
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+
+  </ion-content>
+</ion-view>

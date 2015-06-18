@@ -100,6 +100,8 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 		
 		self.campers = null;
 		
+		self.logForms = null;
+		
 		self.getCamps = function() {
 		var deferred = $q.defer();
 		path = rawpath+'get_all/?access_token='+global.accessToken;
@@ -110,6 +112,24 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 				$http.get(path).
 					success(function(data, status, headers, config) {
 						self.camps = data;
+						deferred.resolve(data);
+					}).error(function(data, status, headers, config) {
+						deferred.reject('Error happened yo!');
+					});		
+			} 
+			
+			return deferred.promise;
+		}
+		
+		self.getLogForms = function(params) {
+		var deferred = $q.defer();
+		path = rawpath+'get_form/?access_token='+global.accessToken+'&camper_id='+params.camper_id+'&type=log&camp_id='+global.selectedCamp;
+			if(self.logForms !== null){ 
+				deferred.resolve(self.logForms);
+			} else {
+				$http.get(path).
+					success(function(data, status, headers, config) {
+						self.logForms = data;
 						deferred.resolve(data);
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
@@ -184,7 +204,7 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 			
 			return deferred.promise;
 		}
-						
+								
 	}
 	
 	return new CV_Forms();
@@ -266,7 +286,7 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 	
 }]);
 
-cvServ.factory('CV_Account', ['$http','$location', function($http, $location) {
+cvServ.factory('CV_Account', ['$http','$location','$ionicPopup', function($http, $location,$ionicPopup) {
 	var path = global.apiPath+'cv_account/signon/';
 	
 	var process_login = function() {
@@ -287,7 +307,7 @@ cvServ.factory('CV_Account', ['$http','$location', function($http, $location) {
 			
 			$http(req).
 			then(function(result) {
-				console.log(result);
+				console.log(result.data);
 				console.log('factory - account');
 				if(result.data.status == 'success'){
 					// save the user data and route the app to the camp selection
@@ -298,7 +318,11 @@ cvServ.factory('CV_Account', ['$http','$location', function($http, $location) {
 					check_user();
 				}else{
 					// build error handlers	
-				console.log(result.data.message); 
+				$ionicPopup.alert({
+					 title: 'We could not Log you in...',
+					 template: result.data.message
+				});				
+				   console.log(result.data.message); 
 				}
 			});		
 	};

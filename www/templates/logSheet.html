@@ -1,0 +1,28 @@
+<ion-view view-title="Log Sheets - {{global.camper.first_name}} {{global.camper.last_name}}">
+  <ion-content class="padding">
+  	<div class="row">
+    	<div class="col col-60 padding-horizontal">
+            <div class="checkin_title">
+                <h2 class="sub_title">{{global.camper.first_name}} {{global.camper.last_name}} - {{logForm.name}}</h2>
+            </div>
+            
+            <div class="row">
+                <ion-item ng-repeat="option in timeOfDay.options" class="col" data-tod="{{option.value}}">
+              		<div class="heading item item-divider">{{ option.label }}</div>
+                    
+                    <div class="logColumn">
+                    <ion-list> 
+                    	<ion-item ng-controller="logRepeat" ng-repeat="day in dayOutput" class="form_list_item list">
+                        	
+                        </ion-item>
+                    </ion-list> 
+                    </div>
+                    
+                </ion-item>
+            </div>
+             
+        </div>
+    </div>
+     
+  </ion-content>
+</ion-view>

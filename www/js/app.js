@@ -76,6 +76,10 @@ cv.config(function($stateProvider, $urlRouterProvider) {
         return CV_Camps.getCampersFromCamp();
     };
 	
+	var getLogForms = function(CV_Camps,$stateParams) {
+        return CV_Camps.getLogForms($stateParams);
+    };
+	
 	var getCamper = function(CV_Camper,$stateParams) {
 		var camper_id = $stateParams.camper_id;
 		
@@ -92,6 +96,7 @@ cv.config(function($stateProvider, $urlRouterProvider) {
     url: '/login',
     templateUrl: 'templates/login.html',
     controller: 'LoginCtrl',	
+	require: ['ionicPopup'],
   })
   .state('camps', {
     url: '/camps',
@@ -108,6 +113,7 @@ cv.config(function($stateProvider, $urlRouterProvider) {
   	resolve: { 
 		campData: getCamp,
 		checkinForms : getCheckinForms,	
+		logForms : getLogForms,	
 	}
   }).state('app.dashboard', {
     url: '/dashboard',
@@ -145,7 +151,43 @@ cv.config(function($stateProvider, $urlRouterProvider) {
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
- });
+ }).state('app.logSheets', {
+    url: '/logsheets',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/logSheets.html',	
+			controller: 'MainCtrl',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.logSheet', {
+    url: '/logsheets/:camper_id',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/logSheet.html',	
+			controller: 'logBuilder',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.logForm', {
+    url: '/logsheets/logform/:camper_id/:camp_id/:form_id',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/logForm.html',	
+			controller: 'logBuilder',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.checkout', {
+    url: '/checkout',
+	views: {
+		'menuContent' : {
+		    templateUrl: 'templates/checkout.html',	
+			controller: 'checkoutForms',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  });
   	// LEFT OFF HERE -- Need to create multiple views for dashboard
 	/*
 	 - dashboard
