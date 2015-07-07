@@ -45,16 +45,46 @@ var appdb = {
 	}
 
 	
-var cv = angular.module('campviews', ['ionic', 'campviews.controllers', 'campviews.services', 'campviews.filters']);
+var cv = angular.module('campviews', ['ionic', 'campviews.controllers', 'campviews.services', 'campviews.factory', 'campviews.filters']);
 
 
-cv.config(function($stateProvider, $urlRouterProvider) {
+cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+    var $http,
+        interceptor = ['$q', '$injector', function ($q, $injector) {
+            var error;
+
+            function success(response) {
+                // get $http via $injector because of circular dependency problem
+                $http = $http || $injector.get('$http');
+                if($http.pendingRequests.length < 1) {
+                    $('#loading').hide();
+                }
+                return response;
+            }
+
+            function error(response) {
+                // get $http via $injector because of circular dependency problem
+                $http = $http || $injector.get('$http');
+                if($http.pendingRequests.length < 1) {
+                    $('#loading').hide();
+                }
+                return $q.reject(response);
+            }
+
+            return function (promise) {
+                $('#loading').show();
+                return promise.then(success, error);
+            }
+        }];
+
+    $httpProvider.interceptors.push(interceptor);
+ 
+
 	var def = '/login';
 	var $current = localStorage.getItem('user_login');
 	if(global.selectedCamp>0 || localStorage.getItem('selectedCamp')){
 		
 		if(global.selectedCamp==0) global.selectedCamp = localStorage.getItem('selectedCamp');
-
 		if( $current ){
 			def = '/dashboard';	
 		}
@@ -69,6 +99,7 @@ cv.config(function($stateProvider, $urlRouterProvider) {
     };
 	
 	var getCamp = function(CV_Camps) {
+		
         return CV_Camps.getCamp();
     };
 		
@@ -76,6 +107,11 @@ cv.config(function($stateProvider, $urlRouterProvider) {
         return CV_Camps.getCampersFromCamp();
     };
 	
+	var getCheckinData = function(CV_Forms,$stateParams) {
+		
+        return CV_Forms.getCheckinValues($stateParams.form_id,$stateParams.camper_id);
+    };
+		
 	var getLogForms = function(CV_Camps,$stateParams) {
         return CV_Camps.getLogForms($stateParams);
     };
@@ -148,6 +184,9 @@ cv.config(function($stateProvider, $urlRouterProvider) {
 		'menuContent' : {
 		    templateUrl: 'templates/checkinForm.html',	
 			controller: 'checkinForm',
+			resolve: { 
+				checkinData: getCheckinData,
+			}
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],

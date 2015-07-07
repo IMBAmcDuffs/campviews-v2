@@ -1,4 +1,5 @@
 var cvServ = angular.module('campviews.services', []);
+var cvFact = angular.module('campviews.factory', []);
 
 cvServ.service('CV_Camp', ['$http', '$q', '$location', function($http,$q,$location){
 	var path = global.apiPath+'cv_camp/';
@@ -14,6 +15,24 @@ cvServ.service('CV_Camp', ['$http', '$q', '$location', function($http,$q,$locati
 		camp: init_camp,
 	}
 	
+}]);
+
+cvFact.factory('Camera', ['$q', function($q) {
+
+  return {
+    getPicture: function(options) {
+      var q = $q.defer();
+
+      navigator.camera.getPicture(function(result) {
+        // Do any magic you need
+        q.resolve(result);
+      }, function(err) {
+        q.reject(err);
+      }, options);
+
+      return q.promise;
+    }
+  }
 }]);
 
 cvServ.service('sessionService', ['$cookieStore', function($cookieStore){
@@ -144,19 +163,14 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 		var camp_id = global.selectedCamp;
 		path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id;
 		
-			if(self.campData !== null){ 
-				deferred.resolve(self.campData);
-			} else {
 				$http.get(path).
 					success(function(data, status, headers, config) {
 						self.campData = data;
-						//console.log(JSON.stringify(config));
 						deferred.resolve(data);
 						
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
-			}
 			
 			return deferred.promise;
 		}
@@ -168,12 +182,14 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 }]);
 
 cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
+	
 	var rawpath = global.apiPath+'cv_form/';
 	
 	function CV_Forms() {
 		var self = this;
 				
 		self.checkinForms = null;
+		self.checkinData = null;
 		
 		self.getCachedForm = function(form_id) {
 			
@@ -184,7 +200,49 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 						return self.forms = forms[i];
 				}
 			}
-		}
+		};
+		
+		self.getCheckinValues = function(form_id,camper_id) {
+		var deferred = $q.defer();
+			path = rawpath+'get_values/?access_token='+global.accessToken+'&camper_id='+camper_id+'&form_id='+form_id+'&camp_id='+global.selectedCamp;
+				$http.get(path).
+					success(function(data, status, headers, config) {
+						self.checkinData = data;
+						deferred.resolve(data.forms);
+						
+					}).error(function(data, status, headers, config) {
+						deferred.reject('Error happened yo!');
+					});		
+			
+			return deferred.promise;
+			
+		};
+		
+		self.saveCheckinForm = function($form) {
+			path = rawpath+'save/?access_token='+global.accessToken;
+			var $data = {};
+			var form = $(document).find('input, textarea');
+			if(form.length>0){
+				form.each(function(i,e){
+					if(!$data.form_values){
+						$data.form_values = {};	
+					}
+					var value = $(this).val();
+					var name = $(this).attr('id');
+					var check = $(this).data('field');
+					if(check){
+						$data.form_values[name] =  value ;
+					}else{
+						$data[name] =  value ;
+					}
+				});
+			}
+			console.log(JSON.stringify($data));
+			$.post(path,$data,function(data, status, xhr) {
+				console.log(JSON.stringify(data));
+			});
+			
+		};
 		
 		self.getCheckinForms = function() {
 		var deferred = $q.defer();

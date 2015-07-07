@@ -35,6 +35,7 @@ cvCont.controller('CampsCtrl', ['$scope', '$document', '$location', '$timeout','
 cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, campData, checkinForms, logForms) {
   // This is the main controller for the whole app. This will pass globals and is part of the menu scope
   if(campData){
+	
 	global.camp = campData.camp;
 	global.campers = campData.campers;
 	global.forms = campData.forms;
@@ -44,7 +45,6 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
 	
 	$scope.global = global;	
   
-	//console.log(JSON.stringify(global.camp));
 	console.log('AppCtrl');
   }
   
@@ -56,6 +56,8 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
   }
   
   if(logForms.status == 'success'){	
+  if(!global.camp) global.camp = {}
+  	if(!global.camp.logForms) global.camp.logForms = {};
 	global.camp.logForms = logForms.forms;
 	$scope.logFroms = logForms.forms;
   }
@@ -112,7 +114,7 @@ cvCont.controller('checkoutForms', ['$scope', '$document', '$stateParams', '$loc
 	
 }]);
 
-cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', function($scope, $document, $stateParams, $location, CV_Camper, CV_Forms) {
+cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'checkinData', function($scope, $document, $stateParams, $location, CV_Camper, CV_Forms, checkinData) {
 	
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
@@ -122,14 +124,38 @@ cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$locat
 	
 	$scope.camper = camper; 
 	$scope.form = form; 
-
+	$scope.form_id = $stateParams.form_id;
+	$scope.camper_id = $stateParams.camper_id;
+	$scope.camp_id = global.selectedCamp;
+	
+	
+	$scope.saveForm = function(form) {
+		var results = CV_Forms.saveCheckinForm(form);
+	};
+	checkinData = checkinData[0].fields;
+	_checkinData = {};
+	if(checkinData.length>0){
+		$(checkinData).each(function(i,e){
+			var value = this.user_value;
+			var name = this.field_id;
+			_checkinData[name] = value;
+		});
+			
+	}
+	
+	$scope.checkinData = _checkinData;
 }]);
 
 
 cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
-	var field_id = $scope.field.id;
-	var field = formBuilder.makeField($scope.field);
-	
+	var field_id = $scope.field.meta_id;
+	var values = _checkinData;
+	if(values){
+		field_value = values['field_'+field_id];
+	}
+	$scope.checkinData = _checkinData;
+	var field = formBuilder.makeField($scope.field,field_value);
+	//console.log(JSON.stringify(_checkinData));
 	$scope.fieldHTML = $sce.trustAsHtml(field);
 	
 }]);
