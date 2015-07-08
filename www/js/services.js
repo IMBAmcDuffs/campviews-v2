@@ -133,6 +133,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 					success(function(data, status, headers, config) {
 						self.camps = data;
 						deferred.resolve(data);
+						$('#loading').hide();
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
