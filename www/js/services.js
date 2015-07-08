@@ -107,7 +107,7 @@ cvServ.service('sessionService', ['$cookieStore', function($cookieStore){
 }]);
 
 
-cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
+cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $injector) {
 	var rawpath = global.apiPath+'cv_camp/';
 	
 	function CV_Camps() {
@@ -123,6 +123,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 		
 		self.getCamps = function() {
 		var deferred = $q.defer();
+		$('#loading').show();
 		path = rawpath+'get_all/?access_token='+global.accessToken;
 			
 			if(self.camps !== null){ 
@@ -136,7 +137,6 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 						deferred.reject('Error happened yo!');
 					});		
 			} 
-			
 			return deferred.promise;
 		}
 		
@@ -161,6 +161,8 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 		self.getCamp = function() {
 		var deferred = $q.defer();
 		var camp_id = global.selectedCamp;
+		$('#loading').show();
+		console.log($('#loading').attr('id'));
 		path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id;
 		
 				$http.get(path).
@@ -172,6 +174,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', function($http, $q) {
 						deferred.reject('Error happened yo!');
 					});		
 			
+				
 			return deferred.promise;
 		}
 		
@@ -198,29 +201,33 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 				for(i=0; i<forms.length; i++) {
 					if(form_id == forms[i].id)
 						return self.forms = forms[i];
-				}
+				} 
 			}
-		};
+		}; 
 		
 		self.getCheckinValues = function(form_id,camper_id) {
 		var deferred = $q.defer();
+		$('#loading').show();
 			path = rawpath+'get_values/?access_token='+global.accessToken+'&camper_id='+camper_id+'&form_id='+form_id+'&camp_id='+global.selectedCamp;
 				$http.get(path).
 					success(function(data, status, headers, config) {
 						self.checkinData = data;
 						deferred.resolve(data.forms);
-						
+						  $('#loading').hide();
+ 
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
 			
 			return deferred.promise;
 			
-		};
+		}; 
 		
 		self.saveCheckinForm = function($form) {
 			path = rawpath+'save/?access_token='+global.accessToken;
-			var $data = {};
+		$('#loading').show();
+			console.log(path);
+			var $data = {}; 
 			var form = $(document).find('input, textarea');
 			if(form.length>0){
 				form.each(function(i,e){
@@ -228,32 +235,35 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 						$data.form_values = {};	
 					}
 					var value = $(this).val();
+					if(value!==''){
 					var name = $(this).attr('id');
-					var check = $(this).data('field');
-					if(check){
-						$data.form_values[name] =  value ;
-					}else{
-						$data[name] =  value ;
+					var check = $(this).data('field');  
+						if(check){
+							$data.form_values[name] =  value ;
+						}else{
+							$data[name] =  value ;
+						}
 					}
 				});
-			}
+			} 
 			console.log(JSON.stringify($data));
-			$.post(path,$data,function(data, status, xhr) {
+			$http.post(path,$data).success(function(data,satus){
 				console.log(JSON.stringify(data));
+				$('#loading').hide();
 			});
-			
+			 
 		};
-		
+		 
 		self.getCheckinForms = function() {
 		var deferred = $q.defer();
+		$('#loading').show();
 		path = rawpath+'get_checkin_form/?access_token='+global.accessToken+'&camp_id='+global.selectedCamp;
-			
 			if(self.checkinForms !== null){ 
 				deferred.resolve(self.checkinForms);
 			} else {
 				$http.get(path).
 					success(function(data, status, headers, config) {
-						self.checkinForms = data;
+						global.checkinForms = self.checkinForms = data;
 						deferred.resolve(data);
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');

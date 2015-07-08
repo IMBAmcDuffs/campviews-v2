@@ -1,7 +1,7 @@
 var cvFilters = angular.module('campviews.filters', []);
 
 cvFilters.filter('notCheckedIn', function() {
-	return function($item) {
+	return function($item) { 
 		if(!$item.checked_in)
 			return $item;
 	};

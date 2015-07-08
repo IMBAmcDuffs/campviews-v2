@@ -128,6 +128,17 @@ img {
 	padding:0px 15px;	
 }
 
+.selected_camper {
+	width:100%;
+	padding:10px;	
+}
+.selected_camper .image img {
+	width:165px !important;	
+}
+
+.selected_camper .camper_data {
+	width: 150px;	
+}
 
 #loading {
 	display:none;

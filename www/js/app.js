@@ -3,14 +3,15 @@ var global = {
 	userData: {},
 	apiPath: 'http://nda.campviews.com/api/',
 	accessToken: 'diabetes8',
+	loading: false,
 	selectedCamp: 0,
 	camper: {}
-}
+};
 
 var cache = {
 	apiReturn: {},
 	postData: {}
-}
+};
 
 var appdb = {
     initialize: function() {
@@ -89,13 +90,15 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			def = '/dashboard';	
 		}
 	}
+	
 	// Factory Ajax Calls
 	var getCamps = function(CV_Camps) {
 		return CV_Camps.getCamps();
     };
 	
 	var getCheckinForms = function(CV_Forms) {
-        return CV_Forms.getCheckinForms();
+		var forms = CV_Forms.getCheckinForms();
+        return forms;
     };
 	
 	var getCamp = function(CV_Camps) {

@@ -31,11 +31,10 @@ cvCont.controller('CampsCtrl', ['$scope', '$document', '$location', '$timeout','
 		
 	}; 
 }]);
-
+ 
 cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, campData, checkinForms, logForms) {
   // This is the main controller for the whole app. This will pass globals and is part of the menu scope
   if(campData){
-	
 	global.camp = campData.camp;
 	global.campers = campData.campers;
 	global.forms = campData.forms;
@@ -47,13 +46,15 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
   
 	console.log('AppCtrl');
   }
-  
+   
   if(checkinForms){
 	  if(checkinForms.forms){
 		if(global.camp)
 		global.camp.checkin = checkinForms.forms; 
 	  }
+	
   }
+  
   
   if(logForms.status == 'success'){	
   if(!global.camp) global.camp = {}
@@ -61,7 +62,7 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
 	global.camp.logForms = logForms.forms;
 	$scope.logFroms = logForms.forms;
   }
-  
+  $('#loading').hide();
   $scope.logout = function() {
 	var $current = localStorage.getItem('user_login');
 	if($current){
@@ -96,9 +97,10 @@ cvCont.controller('checkinForms', ['$scope', '$document', '$stateParams', '$loca
 	}
 	
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
+  $('#loading').hide();
 	
 	$scope.camper = global.camper;
-	
+ 	
 }]);
 
 cvCont.controller('checkoutForms', ['$scope', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', function($scope, $document, $stateParams, $location, CV_Camper, CV_Forms) {
@@ -111,7 +113,6 @@ cvCont.controller('checkoutForms', ['$scope', '$document', '$stateParams', '$loc
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
 	$scope.camper = global.camper;
-	
 }]);
 
 cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'checkinData', function($scope, $document, $stateParams, $location, CV_Camper, CV_Forms, checkinData) {
@@ -133,6 +134,9 @@ cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$locat
 		var results = CV_Forms.saveCheckinForm(form);
 	};
 	checkinData = checkinData[0].fields;
+	
+  	$('#loading').hide();
+	
 	_checkinData = {};
 	if(checkinData.length>0){
 		$(checkinData).each(function(i,e){
@@ -142,8 +146,8 @@ cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$locat
 		});
 			
 	}
-	
 	$scope.checkinData = _checkinData;
+	console.log(JSON.stringify(_checkinData));
 }]);
 
 
@@ -153,10 +157,12 @@ cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
 	if(values){
 		field_value = values['field_'+field_id];
 	}
+	
 	$scope.checkinData = _checkinData;
 	var field = formBuilder.makeField($scope.field,field_value);
-	//console.log(JSON.stringify(_checkinData));
+	
 	$scope.fieldHTML = $sce.trustAsHtml(field);
+  $('#loading').hide();
 	
 }]);
 
@@ -230,7 +236,8 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 	}
 	console.log(output);
 	$scope.dayOutput = output;
-	
+	  $('#loading').hide();
+
 }]);
 
 cvCont.controller('logRepeat', ['$scope','$location', function($scope, $location) {
@@ -242,6 +249,7 @@ cvCont.controller('logRepeat', ['$scope','$location', function($scope, $location
 cvCont.controller('UserCtrl', ['$scope','$location', function($scope, $location) {
 	// set some globals
 	$scope.username = localStorage.getItem('user_info');
+  $('#loading').hide();
 	
 	$scope.logoutUser = function() {
 		var $current = localStorage.getItem('user_login');

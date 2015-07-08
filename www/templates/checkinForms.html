@@ -28,11 +28,11 @@
             <div class="checkin_title">
                 <h2 class="sub_title">Checkin Forms</h2>
             </div>
-            
+             
             <ion-list class="row list list-inset"> 
-                <ion-item ng-repeat="item in global.camp.checkin" class="col list_item"  href="#/checkin/{{camper_id}}/{{item.id}}">
+                <ion-item ng-repeat="item in camper.checkins" class="col list_item {{ item.checked_in ? 'checked_in' : '' }}"  href="#/checkin/{{camper_id}}/{{item.id}}">
                     <div class="list_item_title">
-                        {{item.name}}
+                        <i class="{{ item.checked_in ? 'icon ion-checkmark-circled' : '' }}"> </i>{{item.name}}
                     </div>
                 </ion-item>
             </ion-list>

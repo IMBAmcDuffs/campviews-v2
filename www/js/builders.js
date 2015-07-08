@@ -1,9 +1,11 @@
 var formBuilder = {
+	value: 'd',
   makeField: function(field_obj, field_value) {
 	  //console.log(field_obj,field_value)
 	  value = '';
+	  
 	  if(field_value){
-		value = field_value;  
+		formBuilder.value = field_value;  
 	  }
 	  var fo = field_obj.meta_value;
 	  if(!fo.label)
@@ -34,14 +36,14 @@ var formBuilder = {
     if (field.meta_value.required == 'required') {
       classOutput = 'validate[required]';
     }
-    return '<label class="item item-input item-stacked-label"><span class="input-label">'+field.meta_value.label+'</span><input type="text" class="' + classOutput + '" name="form_values[field_'+field.meta_id+']" data-field="true" id="field_'+field.meta_id+'" ng-model="checkinData.field_'+field.meta_id+'" value="'+value+'" placeholder="'+field.meta_value.placeholder+'"></label>';
+    return '<label class="item item-input item-stacked-label"><span class="input-label">'+formBuilder.value+field.meta_value.label+'</span><input type="text" class="' + classOutput + '" name="form_values[field_'+field.meta_id+']" data-field="true" id="field_'+field.meta_id+'" value="'+formBuilder.value+'" placeholder="'+field.meta_value.placeholder+'"></label>';
   },
   textAreaField: function(field) {
     var classOutput = "";
     if (field.meta_value.required == 'required') {
       classOutput = 'validate[required]';
     }    
-    return '<label class="item item-input item-stacked-label">'+field.meta_value.label+'<textarea class="' + classOutput + '" name="form_values[field_'+field.meta_id+']" id="field_'+field.meta_id+'" data-field="true"  placeholder="'+field.meta_value.placeholder+'" ng-model="checkinData.field_'+field.meta_id+'"></textarea></label>';
+    return '<label class="item item-input item-stacked-label">'+field.meta_value.label+'<textarea class="' + classOutput + '" name="form_values[field_'+field.meta_id+']" id="field_'+field.meta_id+'" data-field="true"  placeholder="'+field.meta_value.placeholder+'" ng-model="checkinData.field_'+field.meta_id+'">'+formBuilder.value+'</textarea></label>';
   },
   checkboxField: function(field) {
     var classOutput = "";

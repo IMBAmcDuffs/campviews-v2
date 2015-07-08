@@ -7,14 +7,15 @@
             </div>
             
             <ion-list> 
-            	<form name="checkinForm" id="form_{{form_id}}" data-id="{{form_id}}" ng-submit="saveForm(checkinForm)">
-                    <ion-item ng-controller="formBuilder" ng-repeat="field in form.fields" class="form_list_item list" id="form_input_{{field.id}}" ng-bind-html="fieldHTML">
+            	<form name="checkinForm" class="checkin_form" id="form_{{form_id}}" data-id="{{form_id}}" ng-submit="saveForm(checkinForm)">
+                    <ion-item ng-controller="formBuilder" ng-repeat="field in form.fields" class="form_list_item list" id="form_input_{{field.id}}" ng-model="checkinData" ng-bind-html="fieldHTML">
                     </ion-item>
                     <ion-item>
                     	<input name="cv_camp_id" id="camp_id" type="hidden" value="{{camp_id}}" />
                     	<input name="cv_camper_id"  id="camper_id" type="hidden" value="{{camper_id}}" />
                     	<input name="cv_form_id"  id="form_id" type="hidden" value="{{form_id}}" />
                     	<input name="cv_type"  id="form_type" type="hidden" value="checkin" />
+                    	<input name="cv_access_token"  id="access_token" type="hidden" value="diabetes8" />
                         <button class="button button-block button-positive" type="submit">
                           Save Form
                         </button>
@@ -23,14 +24,11 @@
             </ion-list>
         </div>
      	<div class="col-35">
-            <div class="checkin_title">
-                <h4 class="sub_title">Checkin Forms</h4>
-            </div>
             
             <ion-list class="row"> 
-                <ion-item ng-repeat="item in global.camp.checkin" class="item-divider item {{ item.id == form_id ? 'item-balanced' : '' }}" id="form_{{item.id}}"  href="#/checkin/{{camper_id}}/{{item.id}}">
+                <ion-item ng-repeat="item in camper.checkins" class="item-divider item {{ item.checked_in ? 'checked_in' : '' }} {{ item.id == form_id ? 'item-balanced' : '' }}" id="form_{{item.id}}" ng-href="#/checkin/{{camper_id}}/{{item.id}}">
                     <div class="list_item_title">
-                        {{item.name}}
+                        <i class="{{ item.checked_in ? 'icon ion-checkmark-circled' : '' }}"></i> {{item.name}}
                     </div>
                 </ion-item>
             </ion-list>
@@ -42,8 +40,8 @@
                     <p>Date of Birth: {{camper.dob}}</p>
                 </div>
                 
-                <ion-item href="#/checkin" class="item padding-vertical item-balanced">
-                  <i class="icon ion-happy"></i> Change Camper
+                <ion-item ng-href="#/checkin" class="item padding-vertical item-balanced">
+                  Change Camper
                 </ion-item>
             </div>
         </div>
