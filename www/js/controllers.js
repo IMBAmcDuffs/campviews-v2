@@ -21,6 +21,7 @@ cvCont.controller('CampsCtrl', ['$scope', '$document', '$location', '$timeout','
 	console.log(JSON.stringify(camps));
 	console.log('Camps');
 	
+  $('#loading').hide();
 	$scope.selectCamp = function(camp_id) {
 		localStorage.setItem('selectedCamp', camp_id);
 		
