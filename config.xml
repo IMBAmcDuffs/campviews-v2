@@ -27,13 +27,6 @@
 
     <preference name="auto-hide-splash-screen" value="false" />
 
-    <icon src="res/icon/ios_72.png" gap:platform="ios" width="72" height="72" />
-
-    <icon src="res/icon/ios_144.png" gap:platform="ios" width="144" height="144" />
-
-    <gap:splash src="res/screen/ipad_landscape.png" gap:platform="ios" width="1024" height="768" />
-
-    <gap:splash src="res/screen/ipad_retina_landscape.png" gap:platform="ios" width="2048" height="1496" />
 
     <access origin="*" />
 </widget>
