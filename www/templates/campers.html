@@ -11,17 +11,9 @@
         </button>
         </div>
     	<ion-list class="row list list-inset"> 
-            <ion-item ng-repeat="item in items" class="col list_item item {{ item.checked_in>0 && page=='checkin' ? 'item-balanced' : '' }}" ng-href="#/checkin/{{item.id}}">
-                <div class="list_item_left">
-              	<div class="image" ng-show="item.thumbnail">
-                	<img ng-src="{{item.thumbnail}}">
-    			</div>
-                <div class="image no-image" ng-show="!item.thumbnail">
-                    <img ng-src="http://placehold.it/300x300">
-                </div>
+            <ion-item ng-repeat="item in items" class="col list_item item  item-thumbnail-left {{ item.checked_in>0 && page=='checkin' ? 'item-balanced' : '' }}" ng-href="#/checkin/{{item.id}}">
+                	<img ng-src="{{item.thumbnail ? item.thumbnail : 'http://placehold.it/300x300'}}" />
 
-                </div>
-                <div class="list_item_right">
                     <div class="list_item_title row">
                         {{item.first_name}} {{item.last_name}}
                     </div>
@@ -30,12 +22,11 @@
                             Checked in {{item.checked_in}} out of {{item.checkins.length}}
                         </div>
                     </div>
-                </div>
                 
             </ion-item>
         </ion-list>
-        <div ng-if="items !== undefined && !items.length" class="no-results">
-          <p>No Results</p>
+        <div ng-if="items !== undefined && !items.length" class="no-results bar bar-assertive ion-alert">
+          No Results please try another request...
         </div>
         
         

@@ -140,6 +140,26 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 			} 
 			return deferred.promise;
 		}
+		 
+		self.getCampersFromCamp = function(params) {
+			var deferred = $q.defer();
+			var camp_id = global.selectedCamp;
+			$('#loading').show();
+			path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id+'&only=campers';
+			
+				$http.get(path).
+					success(function(data, status, headers, config) {
+						self.campData = data;
+						deferred.resolve(data);
+					   $('#loading').hide();
+						
+					}).error(function(data, status, headers, config) {
+						deferred.reject('Error happened yo!');
+					});		
+			
+				
+			return deferred.promise;
+		}
 		
 		self.getLogForms = function(params) {
 		var deferred = $q.defer();
@@ -164,12 +184,13 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 		var camp_id = global.selectedCamp;
 		$('#loading').show();
 		console.log($('#loading').attr('id'));
-		path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id;
+		path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&only=camp&camp_id='+camp_id;
 		
 				$http.get(path).
 					success(function(data, status, headers, config) {
 						self.campData = data;
 						deferred.resolve(data);
+					   $('#loading').hide();
 						
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');

@@ -37,8 +37,6 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
   // This is the main controller for the whole app. This will pass globals and is part of the menu scope
   if(campData){
 	global.camp = campData.camp;
-	global.campers = campData.campers;
-	global.forms = campData.forms;
 	
 	var $current = localStorage.getItem('user_info');
 	global.userName = $current;	
@@ -82,8 +80,12 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
 });
 
 /* main controller unit */
-cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$location', function($scope, $ionicFilterBar, $document, $location) {
+cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$location', 'campData', function($scope, $ionicFilterBar, $document, $location, campData) {
  	
+  if(campData.campers){
+	global.campers = campData.campers;  
+  }
+  
 	$scope.global = global;
 	$scope.items = global.campers;
 	var page = '';
@@ -95,6 +97,19 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 		break;
 		case 'checkin':
 			$scope.page_title = 'Check In Forms - Select Camper';
+			var $items = $scope.items;
+			// lets apply our filters
+			var amount = $items.length;
+			var items = {};
+			for(var i=0;i<amount;i++){
+				var forms = $items[i].checkins.length - 1;
+				var checkedIn = $items[i].checked_in;
+				if(checkedIn < forms){ 
+					items[i] = $items[i];
+				}
+			}
+			
+			$scope.items = items;
 		break;	
 	}
 	

@@ -171,6 +171,9 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			cache: false,
 		    templateUrl: 'templates/campers.html',	
 			controller: 'MainCtrl',
+			resolve: { 
+				campData: getCampers,
+			}
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
@@ -204,6 +207,9 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			cache: false,
 		    templateUrl: 'templates/campers.html',	
 			controller: 'MainCtrl',
+			resolve: { 
+				campData: getCampers,
+			}
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
