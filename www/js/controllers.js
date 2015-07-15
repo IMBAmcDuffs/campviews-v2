@@ -33,7 +33,7 @@ cvCont.controller('CampsCtrl', ['$scope', '$document', '$location', '$timeout','
 	}; 
 }]);
  
-cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $location, $timeout, $location, campData, checkinForms, logForms) {
+cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $location, $timeout, $location, campData) {
   // This is the main controller for the whole app. This will pass globals and is part of the menu scope
   if(campData){
 	global.camp = campData.camp;
@@ -60,21 +60,7 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 	
   };
    
-  if(checkinForms){
-	  if(checkinForms.forms){
-		if(global.camp)
-		global.camp.checkin = checkinForms.forms; 
-	  }
-	
-  }
   
-  
-  if(logForms.status == 'success'){	
-  if(!global.camp) global.camp = {}
-  	if(!global.camp.logForms) global.camp.logForms = {};
-	global.camp.logForms = logForms.forms;
-	$scope.logFroms = logForms.forms;
-  }
   $('#loading').hide();
   $scope.logout = function() {
 	var $current = localStorage.getItem('user_login');
@@ -94,7 +80,7 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 });
 
 /* main controller unit */
-cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$location', 'campData', function($scope, $ionicFilterBar, $document, $location, campData) {
+cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $document, $location, campData, otherData) {
  	
   if(campData.campers){
 	global.campers = campData.campers;  
@@ -109,12 +95,20 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 	
 	$scope.URI = page;
 	
+  
+	
 	switch(page){
 		case 'campers':
 			$scope.page_title = 'Campers - Select Camper';
 		break;
 		case 'logsheets':
 			$scope.page_title = 'Log Sheets - Select Camper';
+		  if(otherData.status === 'success'){	
+		  if(!global.camp) global.camp = {}
+			if(!global.camp.logForms) global.camp.logForms = {};
+			global.camp.logForms = otherData.forms;
+			$scope.logFroms = otherData.forms;
+		  }
 		break;
 		case 'checkin':
 			$scope.page_title = 'Check In Forms - Select Camper';
@@ -130,6 +124,13 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 				}
 			}
 			
+		  if(otherData){
+			  if(otherData.forms){
+				if(global.camp)
+					global.camp.checkin = otherData.forms; 
+			  }
+			
+		  }
 			$scope.items = items;
 		break;	
 	}

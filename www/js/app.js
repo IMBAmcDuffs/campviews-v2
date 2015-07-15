@@ -111,6 +111,10 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
         return CV_Camps.getCampersFromCamp();
     };
 	
+	var getAllCamperData = function() { 
+		return {};
+	}
+	
 	var getCheckinData = function(CV_Forms,$stateParams) {
 		
         return CV_Forms.getCheckinValues($stateParams.form_id,$stateParams.camper_id);
@@ -153,8 +157,6 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     controller: 'AppCtrl',
   	resolve: { 
 		campData: getCamp,
-		checkinForms : getCheckinForms,	
-		logForms : getLogForms,	
 	}
   }).state('app.dashboard', {
     url: '/dashboard',
@@ -162,6 +164,10 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 		'menuContent' : {
 		    templateUrl: 'templates/dashboard.html',	
 			controller: 'MainCtrl',
+			resolve: {
+				campData: function() { return {}; },
+				otherData: function() { return {}; },	
+			}
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
@@ -174,6 +180,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			controller: 'MainCtrl',
 			resolve: { 
 				campData: getCampers,
+				otherData : getCheckinForms,	
 			}
 		},
 	},
@@ -187,6 +194,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			controller: 'MainCtrl',
 			resolve: { 
 				campData: getCampers,
+				otherData : {},	
 			}
 		},
 	},
@@ -233,6 +241,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			controller: 'MainCtrl',
 			resolve: { 
 				campData: getCampers,
+				otherData : getLogForms,	
 			}
 		},
 	},
