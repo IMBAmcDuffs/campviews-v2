@@ -121,8 +121,21 @@ img {
 #menu ul li a { float:left; font-family: 'montserrat'; font-size: 20px; color: #fff; text-decoration: none; width:100%;  padding: 10px;  background:#8DC01A;  line-height: 30px;  border-bottom: 1px solid #444;  border-right: 1px solid #444; }
 #menu ul li span { font-size: 20px; color: #fff; margin: 0 20px; }
 
+.main-menu .list {
+	width:100%;	
+	
+}
 .main-menu .item {
+	width:49%;
+	clear: none;
+	display:inline-block;
+	margin:5px 0px;
+}
+.main-menu .item a {
 	font-size:24px;
+	padding:50px 0px;
+	width:100%;
+	text-align:center;
 }
 .main-menu .item i {
 	padding:0px 15px;	
