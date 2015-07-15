@@ -81,7 +81,7 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 
 /* main controller unit */
 cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $timeout, $document, $location, campData, otherData) {
- 	
+ "use strict";
   if(campData.campers){
 	global.campers = campData.campers;  
   }else{

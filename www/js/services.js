@@ -248,7 +248,7 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 		$('#loading').show();
 			console.log(path);
 			var $data = {}; 
-			var form = $(document).find('input, textarea');
+			var form = $(document).find('input, textarea, select');
 			if(form.length>0){
 				form.each(function(i,e){
 					if(!$data.form_values){
@@ -271,7 +271,7 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 					'Content-Type': 'application/x-www-form-urlencoded' 	
 				} 
 				};
-			console.log(JSON.stringify($data));
+			console.log($data);
 			$http.post(path,$data,$config).success(function(data,satus){
 				console.log(JSON.stringify(data));
 				$('#loading').hide();

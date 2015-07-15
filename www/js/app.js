@@ -171,21 +171,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
- }).state('app.checkin', {
-    url: '/checkin',
-	views: {
-		'menuContent' : {
-			cache: false,
-		    templateUrl: 'templates/campers.html',	
-			controller: 'MainCtrl',
-			resolve: { 
-				campData: getCampers,
-				otherData : getCheckinForms,	
-			}
-		},
-	},
-	require: ['ionList', '^?$ionicScroll'],
-  }).state('app.campers', {
+ }).state('app.campers', {
     url: '/campers',
 	views: {
 		'menuContent' : {
@@ -194,7 +180,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 			controller: 'MainCtrl',
 			resolve: { 
 				campData: getCampers,
-				otherData : {},	
+				otherData: function() { return {}; },	
 			}
 		},
 	},
@@ -218,7 +204,21 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
  		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
- }).state('app.checkinSelected', {
+ }).state('app.checkin', {
+    url: '/checkin',
+	views: {
+		'menuContent' : {
+			cache: false,
+		    templateUrl: 'templates/campers.html',	
+			controller: 'MainCtrl',
+			resolve: { 
+				campData: getCampers,
+				otherData : getCheckinForms,	
+			}
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.checkinSelected', {
     url: '/checkin/:camper_id/:form_id',
 	cache: false,
 	views: {
