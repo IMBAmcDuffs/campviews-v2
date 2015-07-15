@@ -86,6 +86,19 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
  	
 	$scope.global = global;
 	$scope.items = global.campers;
+	var page = '';
+	$scope.page = page = $location.$$path.replace('/','');
+	
+	switch(page){
+		case 'logsheets':
+			$scope.page_title = 'Log Sheets - Select Camper';
+		break;
+		case 'checkin':
+			$scope.page_title = 'Check In Forms - Select Camper';
+		break;	
+	}
+	
+	console.log();
 	
     var filterBarInstance;
 

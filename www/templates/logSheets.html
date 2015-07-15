@@ -1,17 +1,44 @@
 <ion-view view-title="Log Sheets - Select Camper">
-  <ion-content class="padding">
-      	<ion-list class="row list list-inset"> 
-            <ion-item ng-repeat="item in global.campers" class="col list_item"  href="#/logsheets/{{item.id}}">
+  <ion-content class="padding" direction="y">
+        <ion-refresher pulling-icon="ion-arrow-down-b" on-refresh="refreshItems()">
+        </ion-refresher>
+   	<div class="checkin_content">
+    	<div class="checkin_title">
+        	<h2 class="sub_title">Select a Camper:</h2>
+        </div>
+        <div class="search-button row">
+        	<button class="button-icon" ng-click="showFilterBar()">  <i class=" icon ion-ios-search"></i> Search Campers
+        </button>
+        </div>
+    	<ion-list class="row list list-inset"> 
+            <ion-item ng-repeat="item in items" class="col list_item item {{ item.checked_in>0 ? 'item-balanced' : '' }}" ng-href="#/checkin/{{item.id}}">
                 <div class="list_item_left">
-                    <img ng-src="{{item.thumbnail}}" />
+              	<div class="image" ng-show="item.thumbnail">
+                	<img ng-src="{{item.thumbnail}}">
+    			</div>
+                <div class="image no-image" ng-show="!item.thumbnail">
+                    <img ng-src="http://placehold.it/300x300">
+                </div>
+
                 </div>
                 <div class="list_item_right">
-                    <div class="list_item_title">
+                    <div class="list_item_title row">
                         {{item.first_name}} {{item.last_name}}
                     </div>
+                    <div ng-show="page=='checkin'">
+                        <div class="list_item_title row" ng-show="item.checked_in>0">
+                            Checked in {{item.checked_in}} out of {{item.checkins.length}}
+                        </div>
+                    </div>
                 </div>
+                
             </ion-item>
         </ion-list>
-
+        <div ng-if="items !== undefined && !items.length" class="no-results">
+          <p>No Results</p>
+        </div>
+        
+        
+    </div>
   </ion-content>
 </ion-view>

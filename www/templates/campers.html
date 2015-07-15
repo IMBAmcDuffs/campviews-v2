@@ -1,25 +1,44 @@
-<ion-view view-title="Login">
-<div class="container">
-     <ion-header-bar align-title="center" class="bar-balanced">       
-              <h1 class="title">Select a Camp!</h1>
-     </ion-header-bar>
-  <ion-content class="padding">
+<ion-view view-title="{{page_title}}">
+  <ion-content class="padding" direction="y">
+        <ion-refresher pulling-icon="ion-arrow-down-b" on-refresh="refreshItems()">
+        </ion-refresher>
+   	<div class="checkin_content">
+    	<div class="checkin_title">
+        	<h2 class="sub_title">Select a Camper:</h2>
+        </div>
+        <div class="search-button row">
+        	<button class="button-icon" ng-click="showFilterBar()">  <i class=" icon ion-ios-search"></i> Search Campers
+        </button>
+        </div>
     	<ion-list class="row list list-inset"> 
-        	<ion-item ng-repeat="item in camps" class="col list_item" ng-click="selectCamp(item.id)">
-            	<div class="list_item_left">
-                	<img ng-src="{{item.image_url}}" />
+            <ion-item ng-repeat="item in items" class="col list_item item {{ item.checked_in>0 && page=='checkin' ? 'item-balanced' : '' }}" ng-href="#/checkin/{{item.id}}">
+                <div class="list_item_left">
+              	<div class="image" ng-show="item.thumbnail">
+                	<img ng-src="{{item.thumbnail}}">
+    			</div>
+                <div class="image no-image" ng-show="!item.thumbnail">
+                    <img ng-src="http://placehold.it/300x300">
+                </div>
+
                 </div>
                 <div class="list_item_right">
-                    <div class="list_item_title">
-                        {{item.title}}
+                    <div class="list_item_title row">
+                        {{item.first_name}} {{item.last_name}}
                     </div>
-                    <div class="list_item_dates">
-                        <span class="label">Start Date: <b>{{item.start_date}}</b></span>
-                        <span class="label">End Date: <b>{{item.end_date}}</b></span>
+                    <div ng-show="page=='checkin'">
+                        <div class="list_item_title row" ng-show="item.checked_in>0">
+                            Checked in {{item.checked_in}} out of {{item.checkins.length}}
+                        </div>
                     </div>
                 </div>
+                
             </ion-item>
         </ion-list>
+        <div ng-if="items !== undefined && !items.length" class="no-results">
+          <p>No Results</p>
+        </div>
+        
+        
+    </div>
   </ion-content>
-</div>
 </ion-view>

@@ -148,6 +148,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   }).state('app', {
 	abstract: true,  
     templateUrl: "templates/menu.html",
+	cache: false,
     controller: 'AppCtrl',
   	resolve: { 
 		campData: getCamp,
@@ -167,7 +168,8 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     url: '/checkin',
 	views: {
 		'menuContent' : {
-		    templateUrl: 'templates/checkin.html',	
+			cache: false,
+		    templateUrl: 'templates/campers.html',	
 			controller: 'MainCtrl',
 		},
 	},
@@ -199,7 +201,8 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     url: '/logsheets',
 	views: {
 		'menuContent' : {
-		    templateUrl: 'templates/logSheets.html',	
+			cache: false,
+		    templateUrl: 'templates/campers.html',	
 			controller: 'MainCtrl',
 		},
 	},
