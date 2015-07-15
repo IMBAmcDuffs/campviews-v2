@@ -34,13 +34,17 @@
             </ion-list>
             
             <div class="selected_camper">
-            	<div class="image">
-                <img ng-show="camper.thumbnail" ng-src="{{camper.thumbnail}}">
-                <img ng-show="!camper.thumbnail" ng-src="http://placehold.it/300x300">
-                <button class="button" ng-click="takePicture()">Take Picture</button>
+            	<div class="image" ng-show="camper.thumbnail">
+                	<img ng-src="{{camper.thumbnail}}">
     			</div>
+                <div class="image no-image" ng-show="!camper.thumbnail">
+                    <img ng-src="http://placehold.it/300x300">
+                    <p>
+                    	<button class="button" ng-click="takePicture()">Take Picture</button>
+                    </p>
+                </div>
                 <div class="camper_data">
-               	 	<p>Full Name: {{camper.first_name}} {{camper.last_name}}</p>
+               	 	<p>Name: {{camper.first_name}} {{camper.last_name}}</p>
                     <p>Date of Birth: {{camper.dob}}</p>
                 </div>
                 

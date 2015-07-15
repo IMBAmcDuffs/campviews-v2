@@ -82,9 +82,35 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
 });
 
 /* main controller unit */
-cvCont.controller('MainCtrl', ['$scope', '$document', '$location', function($scope, $document, $location) {
+cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$location', function($scope, $ionicFilterBar, $document, $location) {
  	
 	$scope.global = global;
+	$scope.items = global.campers;
+	
+    var filterBarInstance;
+
+
+    $scope.showFilterBar = function () {
+      filterBarInstance = $ionicFilterBar.show({
+        items: $scope.items,
+        update: function (filteredItems) {
+          $scope.items = filteredItems;
+        },
+      });
+    };
+
+    $scope.refreshItems = function () {
+      if (filterBarInstance) {
+        filterBarInstance();
+        filterBarInstance = null;
+      }
+
+      $timeout(function () {
+        getItems();
+        $scope.$broadcast('scroll.refreshComplete');
+      }, 1000);
+    };
+	
 	
 	$scope.aftertitle = '';
 	
@@ -151,7 +177,7 @@ cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$docume
         }, function(err) {
             // An error occured. Show a message to the user
         });
-    }
+    };
 	
 	$scope.saveForm = function(form) {
 		var results = CV_Forms.saveCheckinForm(form);
@@ -177,7 +203,7 @@ cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$docume
 cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
 	var field_id = $scope.field.meta_id;
 	var values = _checkinData;
-	console.log(JSON.stringify(_checkinData));
+
 	field_value = '';
 	if(values['field_'+field_id]){
 		field_value = values['field_'+field_id];
