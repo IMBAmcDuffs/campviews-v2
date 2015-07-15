@@ -116,7 +116,7 @@ cvCont.controller('checkoutForms', ['$scope', '$document', '$stateParams', '$loc
 	$scope.camper = global.camper;
 }]);
 
-cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'checkinData', function($scope, $document, $stateParams, $location, CV_Camper, CV_Forms, checkinData) {
+cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'checkinData', function($scope, $cordovaCamera, $document, $stateParams, $location, CV_Camper, CV_Forms, checkinData) {
 	
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
@@ -130,6 +130,29 @@ cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$locat
 	$scope.camper_id = $stateParams.camper_id;
 	$scope.camp_id = global.selectedCamp;
 	
+	$scope.takePicture = function() {
+		console.log('test pic');
+        var options = { 
+            quality : 75, 
+            destinationType : Camera.DestinationType.DATA_URL, 
+            sourceType : Camera.PictureSourceType.CAMERA, 
+            allowEdit : true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 300,
+            targetHeight: 300,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+ 
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            var imgURI = "data:image/jpeg;base64," + imageData;
+			
+			CV_Camper.uploadImage(imgURI,$stateParams.camper_id);
+			
+        }, function(err) {
+            // An error occured. Show a message to the user
+        });
+    }
 	
 	$scope.saveForm = function(form) {
 		var results = CV_Forms.saveCheckinForm(form);
@@ -155,7 +178,9 @@ cvCont.controller('checkinForm', ['$scope', '$document', '$stateParams', '$locat
 cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
 	var field_id = $scope.field.meta_id;
 	var values = _checkinData;
-	if(values){
+	console.log(JSON.stringify(_checkinData));
+	field_value = '';
+	if(values['field_'+field_id]){
 		field_value = values['field_'+field_id];
 	}
 	

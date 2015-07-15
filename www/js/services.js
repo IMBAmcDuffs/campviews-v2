@@ -305,14 +305,36 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 			}
 		}
 		
+		self.uploadImage = function(image, camper) {
+			var deferred = $q.defer();
+			var camper_id = parseInt(camper);
+			var image_data = image;
+			
+			path = rawpath+'add_image/?access_token='+global.accessToken;
+			
+			if(camper_id>0 && image_data){
+				$http.post(path)
+					.success(function(data, status, headers, config) {
+						if(data.result == 'success'){
+							// do success on upload here
+						}else{
+							// do fail here	
+						}
+					}).error(function(data, status, headers, config) {
+						deferred.reject('Error happened yo!');
+					});		
+			}
+		}
+		
 		self.getCamper = function(params) {
 		var deferred = $q.defer();
 		
 		var camper_id = parseInt(params);
 		
 		global.camper = {};
-		path = rawpath+'get/?access_token='+global.accessToken+'&id='+camper_id;
 			
+			path = rawpath+'get/?access_token='+global.accessToken+'&id='+camper_id;
+		
 			// check if the camper data is already within the global array if not load new
 			if(global.campers){
 				self.getCachedCamper(camper_id);	

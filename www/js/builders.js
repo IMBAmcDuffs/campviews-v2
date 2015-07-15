@@ -1,8 +1,8 @@
 var formBuilder = {
-	value: 'd',
+	value: '',
   makeField: function(field_obj, field_value) {
 	  //console.log(field_obj,field_value)
-	  value = '';
+	  formBuilder.value = '';
 	  
 	  if(field_value){
 		formBuilder.value = field_value;  
@@ -36,7 +36,7 @@ var formBuilder = {
     if (field.meta_value.required == 'required') {
       classOutput = 'validate[required]';
     }
-    return '<label class="item item-input item-stacked-label"><span class="input-label">'+formBuilder.value+field.meta_value.label+'</span><input type="text" class="' + classOutput + '" name="form_values[field_'+field.meta_id+']" data-field="true" id="field_'+field.meta_id+'" value="'+formBuilder.value+'" placeholder="'+field.meta_value.placeholder+'"></label>';
+    return '<label class="item item-input item-stacked-label"><span class="input-label">'+field.meta_value.label+'</span><input type="text" class="' + classOutput + '" name="form_values[field_'+field.meta_id+']" data-field="true" id="field_'+field.meta_id+'" value="'+formBuilder.value+'" placeholder="'+field.meta_value.placeholder+'"></label>';
   },
   textAreaField: function(field) {
     var classOutput = "";
@@ -56,6 +56,7 @@ var formBuilder = {
 	var output;
 	output = '<div class="form-field checkbox-group"><div class="checkbox-title">'+field.meta_value.label+'</div>';
 	var i = 0;
+	var value = formBuilder.value;
 	for(var key in field.meta_value.options){
 		 var option = field.meta_value.options[key];
 		 console.log(value);
@@ -71,6 +72,7 @@ var formBuilder = {
   radioButtonField: function(field) {
 	var output;
 	var classOutput = "";
+	var value = formBuilder.value;
 	if (field.meta_value.required == 'required') {
 	  classOutput = 'validate[required]';
 	}	
@@ -87,6 +89,7 @@ var formBuilder = {
   },
   dropdownField: function(field) {
     var classOutput = "";
+	var value = formBuilder.value;
     if (field.meta_value.required == 'required') {
       classOutput = 'validate[required]';
     }	
