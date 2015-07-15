@@ -26,7 +26,7 @@
      	<div class="col-35">
             
             <ion-list class="row"> 
-                <ion-item ng-repeat="item in camper.checkins" class="item-divider item {{ item.checked_in ? 'checked_in' : '' }} {{ item.id == form_id ? 'item-balanced' : '' }}" id="form_{{item.id}}" ng-href="#/checkin/{{camper_id}}/{{item.id}}">
+                <ion-item ng-repeat="item in camper.checkins" class="item-divider item {{ item.checked_in ? 'checked_in' : '' }} {{ item.id == form_id ? 'item-balanced' : '' }}" id="form_{{item.id}}" href="#/checkin/{{camper_id}}/{{item.id}}">
                     <div class="list_item_title">
                         <i class="{{ item.checked_in ? 'icon ion-checkmark-circled' : '' }}"></i> {{item.name}}
                     </div>

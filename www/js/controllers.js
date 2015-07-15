@@ -116,8 +116,7 @@ cvCont.controller('checkoutForms', ['$scope', '$document', '$stateParams', '$loc
 	$scope.camper = global.camper;
 }]);
 
-cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'checkinData', function($scope, $cordovaCamera, $document, $stateParams, $location, CV_Camper, CV_Forms, checkinData) {
-	
+cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'checkinData', function($scope, $cordovaCamera, $state, $document, $stateParams, $location, CV_Camper, CV_Forms, checkinData) {
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
 	var camper = global.camper;

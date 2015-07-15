@@ -183,8 +183,10 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
  }).state('app.checkinSelected', {
     url: '/checkin/:camper_id/:form_id',
+	cache: false,
 	views: {
 		'menuContent' : {
+			cache: false,
 		    templateUrl: 'templates/checkinForm.html',	
 			controller: 'checkinForm',
 			resolve: { 

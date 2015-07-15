@@ -247,8 +247,13 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 					}
 				});
 			} 
+			$config = {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded' 	
+				} 
+				};
 			console.log(JSON.stringify($data));
-			$http.post(path,$data).success(function(data,satus){
+			$http.post(path,$data,$config).success(function(data,satus){
 				console.log(JSON.stringify(data));
 				$('#loading').hide();
 			});
@@ -262,6 +267,7 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 			if(self.checkinForms !== null){ 
 				deferred.resolve(self.checkinForms);
 			} else {
+				
 				$http.get(path).
 					success(function(data, status, headers, config) {
 						global.checkinForms = self.checkinForms = data;
