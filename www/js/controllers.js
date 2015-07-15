@@ -84,6 +84,9 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
  	
   if(campData.campers){
 	global.campers = campData.campers;  
+	 $('#loading').hide();
+  }else{
+		$location.path('/dashboard');
   }
   
 	$scope.global = global;
@@ -92,6 +95,9 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 	$scope.page = page = $location.$$path.replace('/','');
 	
 	switch(page){
+		case 'campers':
+			$scope.page_title = 'Campers - Select Camper';
+		break;
 		case 'logsheets':
 			$scope.page_title = 'Log Sheets - Select Camper';
 		break;

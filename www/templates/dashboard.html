@@ -1,5 +1,19 @@
 <ion-view view-title="Dashboard">
   <ion-content>
   	<h1>Welcome {{global.userName}}</h1>
+      <ion-list class="main-menu row">
+        <ion-item menu-close href="#/checkin" class="col column padding-vertical item-positive">
+          <i class="icon ion-person-stalker"></i> Campers
+        </ion-item>
+        <ion-item menu-close href="#/checkin" class="col column padding-vertical item-balanced">
+          <i class="icon ion-happy"></i> Check In
+        </ion-item>
+        <ion-item menu-close href="#/logsheets" class="col column padding-vertical item-calm">
+          <i class="icon ion-pizza"></i> Log Sheets
+        </ion-item>
+        <ion-item menu-close href="#/checkout" class="col column padding-vertical item-energized">
+          <i class="icon ion-sad"></i> Check Out
+        </ion-item>
+      </ion-list>
   </ion-content>
 </ion-view>

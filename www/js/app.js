@@ -177,6 +177,29 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.campers', {
+    url: '/campers',
+	views: {
+		'menuContent' : {
+			cache: false,
+		    templateUrl: 'templates/campers.html',	
+			controller: 'MainCtrl',
+			resolve: { 
+				campData: getCampers,
+			}
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
+  }).state('app.camper', {
+    url: '/camper/:camper_id',
+	views: {
+		'menuContent' : {
+			cache: false,
+		    templateUrl: 'templates/camper.html',	
+			controller: 'CamperCrtl',
+		},
+	},
+	require: ['ionList', '^?$ionicScroll'],
   }).state('app.camperSelected', {
     url: '/checkin/:camper_id',
 	views: {
