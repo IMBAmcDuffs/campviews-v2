@@ -173,6 +173,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
  }).state('app.campers', {
     url: '/campers',
+	cache: false,
 	views: {
 		'menuContent' : {
 			cache: false,
@@ -187,6 +188,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
   }).state('app.camper', {
     url: '/camper/:camper_id',
+	cache: false,
 	views: {
 		'menuContent' : {
 			cache: false,
@@ -197,6 +199,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
   }).state('app.camperSelected', {
     url: '/checkin/:camper_id',
+	cache: false,
 	views: {
 		'menuContent' : {
 		    templateUrl: 'templates/checkinForms.html',	
@@ -206,6 +209,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
  }).state('app.checkin', {
     url: '/checkin',
+	cache: false,
 	views: {
 		'menuContent' : {
 			cache: false,
@@ -234,6 +238,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
  }).state('app.logSheets', {
     url: '/logsheets',
+	cache: false,
 	views: {
 		'menuContent' : {
 			cache: false,
@@ -248,6 +253,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	require: ['ionList', '^?$ionicScroll'],
   }).state('app.logSheet', {
     url: '/logsheets/:camper_id',
+	cache: false,
 	views: {
 		'menuContent' : {
 		    templateUrl: 'templates/logSheet.html',	
