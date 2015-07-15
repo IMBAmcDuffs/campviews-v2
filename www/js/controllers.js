@@ -89,7 +89,6 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 	
     var filterBarInstance;
 
-
     $scope.showFilterBar = function () {
       filterBarInstance = $ionicFilterBar.show({
         items: $scope.items,
