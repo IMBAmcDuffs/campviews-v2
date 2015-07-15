@@ -126,10 +126,11 @@ img {
 	
 }
 .main-menu .item {
-	width:49%;
+	width:50%;
 	clear: none;
 	display:inline-block;
-	margin:5px 0px;
+	margin-top:3px;
+	box-sizing: border-box;
 }
 .main-menu .item a {
 	font-size:24px;

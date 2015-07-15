@@ -84,7 +84,6 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
  	
   if(campData.campers){
 	global.campers = campData.campers;  
-	 $('#loading').hide();
   }else{
 		$location.path('/dashboard');
   }
