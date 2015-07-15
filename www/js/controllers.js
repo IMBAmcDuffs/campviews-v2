@@ -33,7 +33,7 @@ cvCont.controller('CampsCtrl', ['$scope', '$document', '$location', '$timeout','
 	}; 
 }]);
  
-cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, campData, checkinForms, logForms) {
+cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $location, $timeout, $location, campData, checkinForms, logForms) {
   // This is the main controller for the whole app. This will pass globals and is part of the menu scope
   if(campData){
 	global.camp = campData.camp;
@@ -45,6 +45,20 @@ cvCont.controller('AppCtrl', function($scope, $ionicModal, $timeout, $location, 
   
 	console.log('AppCtrl');
   }
+  
+  $scope.setNavColor = function($color){
+	var _b = false;	
+	$scope.page = page = $location.$$path.replace('/','');
+	var params = page.split('/');
+	if(params.length<  2 ){
+		global.viewColor = $color;
+	}
+	
+	if($color == 'back') {
+	  $ionicHistory.goBack();
+	}
+	
+  };
    
   if(checkinForms){
 	  if(checkinForms.forms){
@@ -93,6 +107,8 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 	var page = '';
 	$scope.page = page = $location.$$path.replace('/','');
 	
+	$scope.URI = page;
+	
 	switch(page){
 		case 'campers':
 			$scope.page_title = 'Campers - Select Camper';
@@ -117,18 +133,24 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 			$scope.items = items;
 		break;	
 	}
-	
-	console.log();
-	
+		
     var filterBarInstance;
 
     $scope.showFilterBar = function () {
       filterBarInstance = $ionicFilterBar.show({
         items: $scope.items,
+		done: function() {
+			var element = window.document.getElementsByClassName('filter-bar-search');
+        	if(element){
+          		element.focus();
+			}
+		},
         update: function (filteredItems) {
           $scope.items = filteredItems;
         },
       });
+	  
+
     };
 
     $scope.refreshItems = function () {

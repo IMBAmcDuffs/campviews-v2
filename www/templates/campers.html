@@ -1,17 +1,13 @@
 <ion-view view-title="{{page_title}}">
-  <ion-content class="padding" direction="y">
+  <ion-content direction="y">
+        <div class="search-button bar header-bar bar-dark">
+        	<h2 class="title" ng-click="showFilterBar()">  <i class=" icon ion-ios-search"></i> Search Campers</h2>
+        </div>
         <ion-refresher pulling-icon="ion-arrow-down-b" on-refresh="refreshItems()">
         </ion-refresher>
-   	<div class="checkin_content">
-    	<div class="checkin_title">
-        	<h2 class="sub_title">Select a Camper:</h2>
-        </div>
-        <div class="search-button row">
-        	<button class="button-icon" ng-click="showFilterBar()">  <i class=" icon ion-ios-search"></i> Search Campers
-        </button>
-        </div>
+   	<div class="camper_list_content padding">
     	<ion-list class="row list list-inset"> 
-            <ion-item ng-repeat="item in items" class="col list_item item card item-thumbnail-left {{ item.checked_in>0 && page=='checkin' ? 'item-balanced' : '' }}" ng-href="#/checkin/{{item.id}}">
+            <ion-item ng-repeat="item in items" class="col list_item item card item-thumbnail-left {{ item.checked_in>0 && page=='checkin' ? 'item-balanced' : '' }}" ng-href="#/{{URI}}/{{item.id}}">
                 	<img ng-src="{{item.thumbnail ? item.thumbnail : 'http://placehold.it/300x300'}}" />
 
                     <div class="list_item_title row">

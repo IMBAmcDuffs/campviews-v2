@@ -5,6 +5,7 @@ var global = {
 	accessToken: 'diabetes8',
 	loading: false,
 	selectedCamp: 0,
+	navColor : 'bar-stable',
 	camper: {}
 };
 
