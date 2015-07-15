@@ -80,7 +80,7 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 });
 
 /* main controller unit */
-cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $document, $location, campData, otherData) {
+cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $timeout, $document, $location, campData, otherData) {
  	
   if(campData.campers){
 	global.campers = campData.campers;  
@@ -88,14 +88,13 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 		$location.path('/dashboard');
   }
   
+  function loadItems() {
 	$scope.global = global;
 	$scope.items = global.campers;
 	var page = '';
 	$scope.page = page = $location.$$path.replace('/','');
 	
 	$scope.URI = page;
-	
-  
 	
 	switch(page){
 		case 'campers':
@@ -115,12 +114,11 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 			var $items = $scope.items;
 			// lets apply our filters
 			var amount = $items.length;
-			var items = {};
 			for(var i=0;i<amount;i++){
 				var forms = $items[i].checkins.length - 1;
 				var checkedIn = $items[i].checked_in;
-				if(checkedIn < forms){ 
-					items[i] = $items[i];
+				if(checkedIn === forms){ 
+					delete $items[i];
 				}
 			}
 			
@@ -131,21 +129,17 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
 			  }
 			
 		  }
-			$scope.items = items;
+			$scope.items = $items;
 		break;	
 	}
+  }
+  loadItems();
 		
     var filterBarInstance;
 
     $scope.showFilterBar = function () {
       filterBarInstance = $ionicFilterBar.show({
         items: $scope.items,
-		done: function() {
-			var element = window.document.getElementsByClassName('filter-bar-search');
-        	if(element){
-          		element.focus();
-			}
-		},
         update: function (filteredItems) {
           $scope.items = filteredItems;
         },
@@ -161,7 +155,7 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$document', '$locat
       }
 
       $timeout(function () {
-        getItems();
+        loadItems();
         $scope.$broadcast('scroll.refreshComplete');
       }, 1000);
     };
