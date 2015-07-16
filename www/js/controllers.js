@@ -229,7 +229,7 @@ cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$docume
     };
 	
 	$scope.saveForm = function(form) {
-		var results = CV_Forms.saveCheckinForm(form);
+		var results = CV_Forms.saveForm(form);
 	};
 	checkinData = checkinData[0].fields;
 	
@@ -245,13 +245,72 @@ cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$docume
 			
 	}
 	$scope.checkinData = _checkinData;
-	console.log(JSON.stringify(_checkinData));
+	
+}]);
+
+cvCont.controller('logForm', ['$scope', '$cordovaCamera', '$state', '$document', '$stateParams', '$location', 'CV_Camper', 'CV_Forms', 'logForms', function($scope, $cordovaCamera, $state, $document, $stateParams, $location, CV_Camper, CV_Forms, logForms) {
+	CV_Camper.getCachedCamper($stateParams.camper_id); 
+	
+	var camper = global.camper;
+	console.log(logForms);
+	  if(logForms.status === 'success'){	
+	  if(!global.camp) global.camp = {}
+		if(!global.camp.logForms) global.camp.logForms = {};
+		global.camp.logForms = logForms.forms;
+		$scope.logFroms = logForms.forms;
+	  }
+
+	var form = logForms.forms[0]; 
+	
+	$scope.camper = camper; 
+	$scope.form = form; 
+	$scope.camper_id = $stateParams.camper_id;
+	$scope.camp_id = global.selectedCamp;
+	$scope.form_id = $stateParams.form_id;
+	$scope.time_of_day = $stateParams.time_of_day;
+	$scope.date = $stateParams.day;
+	
+	
+		
+	$scope.saveForm = function(form) {
+		var results = CV_Forms.saveForm(form);
+	};
+	
+  	$('#loading').hide();
+	
+	// set data (mask as var _checkinData)
+	_checkinData = {};
+	
+	// lets get the values and what not
+	if(form.fields){
+		for(var i = 0; i<form.fields.length; i++){
+			var field_id = form.fields[i].meta_id;
+			var m_value = form.fields[i].meta_value;
+			
+			if(m_value && typeof m_value !== 'object'){
+				m_value = JSON.parse(m_value);
+			}
+			
+			if(m_value.label === "Time of Day"){
+				_checkinData['field_'+field_id] = $scope.time_of_day;
+			}
+			
+			if(m_value.label === "Date") {
+				_checkinData['field_'+field_id] = $scope.date;
+			}
+			
+		}
+	}
+	
 }]);
 
 
 cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
 	var field_id = $scope.field.meta_id;
-	var values = _checkinData;
+	var values = {};	
+	if(_checkinData!==null) {
+		values = _checkinData;
+	}
 
 	field_value = '';
 	if(values['field_'+field_id]){
@@ -280,9 +339,13 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 	$scope.logValues = $scope.logForm.values;
 	
 	$scope.timeOfDay = getTimeofDay($scope.logFields);
-	
+	console.log($scope.timeOfDay);
 	if($scope.timeOfDay) {
-		$scope.timeOfDay = JSON.parse($scope.timeOfDay.meta_value);
+		if($scope.timeOfDay.meta_value && typeof $scope.timeOfDay.meta_value !== 'object'){
+			$scope.timeOfDay = JSON.parse($scope.timeOfDay.meta_value);
+		}else{
+			$scope.timeOfDay = $scope.timeOfDay.meta_value;
+		}
 	}
 	
 	function getTimeofDay(fields){
@@ -295,6 +358,7 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 		}
 	}
 	
+	$scope.maxTOD = i;
 	function buildValueBlock(fields) {
 		if(fields.length>0){
 			var _fields = {};
@@ -340,6 +404,8 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 	}
 	
 	$scope.cur_i = 0;
+	
+	$scope.maxDAYS = global.camp._length-1;
 	
 	$scope.dayOutput = output;
 	  $('#loading').hide();

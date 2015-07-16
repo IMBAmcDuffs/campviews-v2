@@ -125,6 +125,10 @@ img {
 	padding:10px;
 }
 
+.logsheets-container {
+	padding-top:50px;
+}
+
 .checkin_content {
 	float:left;
 	width:100%;	
@@ -145,7 +149,7 @@ img {
 #menu ul li a { float:left; font-family: 'montserrat'; font-size: 20px; color: #fff; text-decoration: none; width:100%;  padding: 10px;  background:#8DC01A;  line-height: 30px;  border-bottom: 1px solid #444;  border-right: 1px solid #444; }
 #menu ul li span { font-size: 20px; color: #fff; margin: 0 20px; }
 
-.main-menu .list {
+.main-menu .list, .camper-checkin-buttons .list {
 	width:100%;	
 	
 }
@@ -200,11 +204,14 @@ img {
 	padding:10px;	
 }
 .selected_camper .image img {
-	width:165px !important;	
+	width:100%;
+	height:auto;
+	max-width:100%;
+	max-height:200px;
 }
 
 .selected_camper .camper_data {
-	width: 150px;	
+	padding:15px 0px;	
 }
 
 #loading {

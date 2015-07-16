@@ -1,7 +1,7 @@
 <ion-view view-title="Check In - {{global.camper.first_name}} {{global.camper.last_name}} - {{form.name}} Form Selected">
   <ion-content class="padding">
   	<div class="row">
-    	<div class="col col-60 padding-horizontal">
+    	<div class="col col-75 padding-horizontal">
             <div class="checkin_title">
                 <h2 class="sub_title">{{form.name}} Form</h2>
             </div>
@@ -26,9 +26,9 @@
                 </form>
             </ion-list>
         </div>
-     	<div class="col-35">
+     	<div class="col col-25">
             
-            <ion-list class="row"> 
+            <ion-list class="row camper-checkin-buttons"> 
                 <ion-item ng-repeat="item in camper.checkins" class="item-divider item {{ item.checked_in ? 'checked_in' : '' }} {{ item.id == form_id ? 'item-balanced' : '' }}" id="form_{{item.id}}" href="#/checkin/{{camper_id}}/{{item.id}}">
                     <div class="list_item_title">
                         <i class="{{ item.checked_in ? 'icon ion-checkmark-circled' : '' }}"></i> {{item.name}}
@@ -36,15 +36,13 @@
                 </ion-item>
             </ion-list>
             
-            <div class="selected_camper">
+            
+            <ion-item class="item col selected_camper">
             	<div class="image" ng-show="camper.thumbnail">
                 	<img ng-src="{{camper.thumbnail}}">
     			</div>
                 <div class="image no-image" ng-show="!camper.thumbnail">
                     <img ng-src="http://placehold.it/300x300">
-                    <p>
-                    	<button class="button" ng-click="takePicture()">Take Picture</button>
-                    </p>
                 </div>
                 <div class="camper_data">
                	 	<p>Name: {{camper.first_name}} {{camper.last_name}}</p>
@@ -54,7 +52,8 @@
                 <ion-item ng-href="#/checkin" class="item padding-vertical item-balanced">
                   Change Camper
                 </ion-item>
-            </div>
+            </ion-item>
+        </div>
         </div>
     </div>
      

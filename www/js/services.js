@@ -243,7 +243,7 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 			
 		}; 
 		
-		self.saveCheckinForm = function($form) {
+		self.saveForm = function($form) {
 			path = rawpath+'save/?access_token='+global.accessToken;
 		$('#loading').show();
 			console.log(path);

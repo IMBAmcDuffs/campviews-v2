@@ -266,7 +266,10 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	views: {
 		'menuContent' : {
 		    templateUrl: 'templates/logForm.html',	
-			controller: 'logBuilder',
+			controller: 'logForm',
+			resolve: {
+				logForms : getLogForms	
+			}
 		},
 	},
 	require: ['ionList', '^?$ionicScroll'],
