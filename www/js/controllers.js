@@ -325,14 +325,12 @@ cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
 	
 }]);
 
-cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', 'logForms', function($scope, CV_Camper, $stateParams, logForms) {
+cvCont.controller('logBuilder', ['$scope', '$timeout', 'CV_Camper', '$stateParams', 'logForms', function($scope, $timeout, CV_Camper, $stateParams, logForms) {
 	
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
 	var camper = global.camper;
-	
-	console.log(logForms);
-	
+		
 	  if(logForms.status === 'success'){	
 	  if(!global.camp) global.camp = {}
 		if(!global.camp.logForms) global.camp.logForms = {};
@@ -385,6 +383,41 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', 'logForm
 		}
 	}
 	
+	$scope.filterCurrent = function() {
+		
+		var _timeOfDay = {};
+		if(timeOfDay){
+			$opt = timeOfDay.options;
+			$options = Object.keys($opt).length+1;
+			var time = getTheTime();
+			var req_n = time[time.length-1].split(' ');
+			req_n = req_n[1].toLowerCase();
+			var req_min_time = time[0]-1;
+			var req_max_time = time[0]+1;
+			
+			if($options>0){
+				for(var $i=1; $i<=$options; $i++){
+					console.log($opt[$i]);
+					var optTime = $opt[$i].value.split(':');
+					var optN = optTime[1].split(' ');
+					optN = optN[1].toLowerCase();
+					
+					console.log(optTime);
+					console.log(optN);
+				}
+			}
+		}
+		var $tod = Object.keys(_timeOfDay).length;
+		if($tod > 0){
+			timeOfDay = _timeOfDay;
+		}
+	};
+	
+	function getTheTime() {
+		var time = new Date();
+		
+		return time.toLocaleTimeString().replace(' PDT','').split(':');
+	}
 	
 	function getTheDate(i){
 		var _start = global.camp.start_date;
@@ -402,6 +435,7 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', 'logForm
 	
 	var _length = global.camp._length;
 	
+	$('#loading').show();
 	var output = {};
 	dayOutput_length = 0;
 	if(timeOfDay.options){
@@ -455,7 +489,8 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', 'logForm
 	$scope.maxDAYS = global.camp._length-1;
 	$scope.dayOutput = output;
 	$scope.timeOfDay = timeOfDay;
-	  $('#loading').hide();
+	
+	  $timeout(function(){$('#loading').hide();});
 	  
 	$scope.setIntervalScope = function($index){
 		$scope.cur_i = $index;	
