@@ -1,6 +1,18 @@
 var cvServ = angular.module('campviews.services', []);
 var cvFact = angular.module('campviews.factory', []);
+var cvDir = angular.module('campviews.directive', []);
 
+
+cvDir.directive('toggleClass', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('click', function() {
+                element.toggleClass(attrs.toggleClass);
+            });
+        }
+    };
+});
 cvServ.service('CV_Camp', ['$http', '$q', '$location', function($http,$q,$location){
 	var path = global.apiPath+'cv_camp/';
 	
@@ -164,18 +176,14 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 		var deferred = $q.defer();
 		path = rawpath+'get_form/?access_token='+global.accessToken+'&camper_id='+params.camper_id+'&type=log&camp_id='+global.selectedCamp;
 		$('#loading').show();
-			if(self.logForms !== null){ 
-				deferred.resolve(self.logForms);
-			} else {
-				$http.get(path).
-					success(function(data, status, headers, config) {
-						self.logForms = data;
-						deferred.resolve(data);
-						$('#loading').hide();
-					}).error(function(data, status, headers, config) {
-						deferred.reject('Error happened yo!');
-					});		
-			} 
+		$http.get(path).
+			success(function(data, status, headers, config) {
+				self.logForms = data;
+				deferred.resolve(data);
+				$('#loading').hide();
+			}).error(function(data, status, headers, config) {
+				deferred.reject('Error happened yo!');
+			});		
 			
 			return deferred.promise;
 		}
@@ -206,7 +214,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 	
 }]);
 
-cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
+cvServ.factory('CV_Forms', ['$http', '$q', '$location', '$ionicPopup', function($http, $q, $location, $ionicPopup) {
 	
 	var rawpath = global.apiPath+'cv_form/';
 	
@@ -276,6 +284,17 @@ cvServ.factory('CV_Forms', ['$http', '$q', function($http, $q) {
 			console.log($data);
 			$http.post(path,$data,$config).success(function(data,satus){
 				console.log(JSON.stringify(data));
+				if(data.status === 'success'){
+				   var alertPopup = $ionicPopup.alert({
+					 title: 'Success!',
+					 template: 'The system saved the campers Log entry.'
+				   });
+				   alertPopup.then(function(res) {
+					 $location.path('/logsheets/'+$data.camper_id);
+				   });
+				}else{
+					
+				}
 				$('#loading').hide();
 			});
 			 

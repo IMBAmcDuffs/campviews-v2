@@ -15,13 +15,13 @@
                         <ion-item ng-show="{{cur_i==0}}" class="col item item-dark day-title-container">
                             <span class="day-title">{{day.title ? day.title : day.day}}</span>
                         </ion-item>
-                    	<ion-item ng-show="day.user_values" class="item item-text-wrap">
+                    	<ion-item ng-show="day.user_values" id="user_item_{{cur_i}}_{{$index}}" toggle-class="expand" class="day-user-toggle {{ day.user_values ? 'item-balanced' : '' }} {{ expand ? 'expand' : '' }} item item-text-wrap">
                         	<div class="day-user-value" ng-repeat="user_value in day.user_values">
                             	<b>{{user_value.label}}</b>: {{user_value.value}}
                             </div>
                         </ion-item>
-                        <ion-item href="#/logsheets/logform/{{camper_id}}/{{logForm.id}}/{{option.value}}/{{day.date}}">
-                            <span ng-show="!day.user_value" class="day-value no-value">Tap to add</span>
+                        <ion-item ng-show="!day.user_values" href="#/logsheets/logform/{{camper_id}}/{{logForm.id}}/{{option.value}}/{{day.date}}">
+                            <span class="day-value no-value">Tap to add</span>
                         </ion-item>
                     </ion-list>
                     </div>

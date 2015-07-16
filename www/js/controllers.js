@@ -473,7 +473,7 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', 'logForm
 		
 		return $data;	
 	};
-
+	
 }]);
 
 
