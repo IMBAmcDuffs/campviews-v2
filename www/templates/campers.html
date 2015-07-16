@@ -5,6 +5,7 @@
         </div>
         <ion-refresher pulling-icon="ion-arrow-down-b" on-refresh="refreshItems()">
         </ion-refresher>
+        
    	<div class="camper_list_content padding">
     	<ion-list class="row list list-inset"> 
             <ion-item ng-repeat="item in items" class="col list_item item card item-thumbnail-left {{ item.checked_in>0 && page=='checkin' ? 'item-balanced' : '' }}" ng-href="#/{{URI}}/{{item.id}}">

@@ -101,6 +101,30 @@ img {
 	padding:10px;	
 }
 
+.day-value {
+	font-size:14px;
+	color:#414141;
+	text-align:center;
+	width:100%;
+	display:inline-block;
+	padding: 5px;
+}
+.day-value.no-value {
+	color:#ACACAC;	
+	font-weight:bold;
+	opacity: 0.8;
+}
+.day-container {
+	position:relative;	
+}
+.day-title-container {
+	position:absolute;	
+	left:-115px;
+	width:115px;
+	text-transform:capitalize;
+	padding:10px;
+}
+
 .checkin_content {
 	float:left;
 	width:100%;	

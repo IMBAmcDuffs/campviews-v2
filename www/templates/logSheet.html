@@ -1,24 +1,31 @@
 <ion-view view-title="Log Sheets - {{global.camper.first_name}} {{global.camper.last_name}}">
   <ion-content class="padding">
   	<div class="row">
-    	<div class="col col-60 padding-horizontal">
-            <div class="checkin_title">
-                <h2 class="sub_title">{{global.camper.first_name}} {{global.camper.last_name}} - {{logForm.name}}</h2>
-            </div>
-            
+        <div class="col checkin_title">
+            <h2 class="sub_title">{{global.camper.first_name}} {{global.camper.last_name}} - {{logForm.name}}</h2>
+        </div>
+    </div>
+    <div class="row"> 
+    	<div class="col tod-container">
             <div class="row">
-                <ion-item ng-repeat="option in timeOfDay.options" class="col" data-tod="{{option.value}}">
-              		<div class="heading item item-divider">{{ option.label }}</div>
+            	<div class="col-10 col">&nbsp;</div>
+                <div ng-repeat="option in timeOfDay.options" class="col" data-tod="{{option.value}}">
+              		<div ng-init="setIntervalScope($index)" class="heading item item-divider">{{ option.label }}</div>
                     
-                    <div class="logColumn">
-                    <ion-list> 
-                    	<ion-item ng-controller="logRepeat" ng-repeat="day in dayOutput" class="form_list_item list">
-                        	
+                    <div class="logColumn" id="in_{{$index}}">
+                    <ion-list class="list" ng-controller="logRepeat" ng-repeat="day in getIndex(dayOutput,$index)" > 
+                        <ion-item ng-show="{{cur_i==0}}" class="col item item-dark day-title-container">
+                            <span class="day-title">{{day.title ? day.title : day.day}}</span>
                         </ion-item>
+                    	<ion-list class="list day-container">
+                        	<ion-item href="#/logsheets/logform/{{camper_id}}/{{logForm.id}}/{{option.value}}/{{day.date}}">
+                                <span ng-show="!day.user_value" class="day-value no-value">Tap to add</span>
+                            </ion-item>
+                        </ion-list>
                     </ion-list> 
                     </div>
                     
-                </ion-item>
+                </div>
             </div>
              
         </div>

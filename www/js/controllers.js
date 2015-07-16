@@ -273,18 +273,22 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 	var camper = global.camper;
 	
 	$scope.camper_name = global.camper;
+	$scope.camper_id = $stateParams.camper_id;
 	$scope.logForm = global.camp.logForms[0];
 	
 	$scope.logFields = $scope.logForm.fields;
+	$scope.logValues = $scope.logForm.values;
 	
 	$scope.timeOfDay = getTimeofDay($scope.logFields);
 	
-	$scope.timeOfDay = JSON.parse($scope.timeOfDay.meta_value);
+	if($scope.timeOfDay) {
+		$scope.timeOfDay = JSON.parse($scope.timeOfDay.meta_value);
+	}
 	
 	function getTimeofDay(fields){
 		if(fields.length>0){
 			for(i=0;i<fields.length;i++){
-				if(fields[i].meta_key == 'formfield_001'){
+				if(fields[i].meta_key === 'formfield_001'){
 					return fields[i];	
 				}
 			}
@@ -327,25 +331,37 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 		var valueBlock = buildValueBlock($scope.logFields);		
 		// we need to insert the proper data into the proper date so that everything matches up.
 		for(i=1; i<=_length+1; i++){
-			if(!output[i]) output[i] = {};
+			if(!output[i]) { output[i] = {}; }
 			
 			output[i].day = 'day'+i;
 			output[i].date = getTheDate((i));
 			output[i].value = valueBlock;
 		}
 	}
-	console.log(output);
+	
+	$scope.cur_i = 0;
+	
 	$scope.dayOutput = output;
 	  $('#loading').hide();
+	  
+	$scope.setIntervalScope = function($index){
+		$scope.cur_i = $index;	
+		
+	};
+	
+	$scope.getIndex = function($data,$index){
+		$scope.cur_i = $index;	
+		return $data;	
+	};
 
 }]);
+
 
 cvCont.controller('logRepeat', ['$scope','$location', function($scope, $location) {
 	
 	//build out the days of the event and output an array to the template
 	
 }]);
-
 cvCont.controller('UserCtrl', ['$scope','$location', function($scope, $location) {
 	// set some globals
 	$scope.username = localStorage.getItem('user_info');

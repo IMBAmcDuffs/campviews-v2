@@ -262,7 +262,7 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	},
 	require: ['ionList', '^?$ionicScroll'],
   }).state('app.logForm', {
-    url: '/logsheets/logform/:camper_id/:camp_id/:form_id',
+    url: '/logsheets/logform/:camper_id/:form_id/:time_of_day/:day',
 	views: {
 		'menuContent' : {
 		    templateUrl: 'templates/logForm.html',	
