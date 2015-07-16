@@ -153,6 +153,14 @@ img {
 	width:100%;	
 	
 }
+.flex-container {
+	display:flex;
+	flex-direction:column;
+	flex-wrap: no-wrap;
+}
+.flex-container .flex-column {
+	flex: 1 auto 100%;	
+}
 .main-menu .item {
 	width:50%;
 	clear: none;

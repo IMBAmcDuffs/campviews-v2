@@ -252,7 +252,6 @@ cvCont.controller('logForm', ['$scope', '$cordovaCamera', '$state', '$document',
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
 	var camper = global.camper;
-	console.log(logForms);
 	  if(logForms.status === 'success'){	
 	  if(!global.camp) global.camp = {}
 		if(!global.camp.logForms) global.camp.logForms = {};
@@ -262,6 +261,7 @@ cvCont.controller('logForm', ['$scope', '$cordovaCamera', '$state', '$document',
 
 	var form = logForms.forms[0]; 
 	
+
 	$scope.camper = camper; 
 	$scope.form = form; 
 	$scope.camper_id = $stateParams.camper_id;
@@ -325,26 +325,38 @@ cvCont.controller('formBuilder', ['$sce','$scope', function($sce, $scope) {
 	
 }]);
 
-cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function($scope, CV_Camper, $stateParams) {
+cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', 'logForms', function($scope, CV_Camper, $stateParams, logForms) {
 	
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
 	var camper = global.camper;
 	
+	console.log(logForms);
+	
+	  if(logForms.status === 'success'){	
+	  if(!global.camp) global.camp = {}
+		if(!global.camp.logForms) global.camp.logForms = {};
+		global.camp.logForms = logForms.forms;
+		$scope.logFroms = logForms.forms;
+	  }
+ 
+	
 	$scope.camper_name = global.camper;
 	$scope.camper_id = $stateParams.camper_id;
-	$scope.logForm = global.camp.logForms[0];
+	$scope.logForm = form = logForms.forms[0];
 	
-	$scope.logFields = $scope.logForm.fields;
-	$scope.logValues = $scope.logForm.values;
+	$scope.logFields = form.fields;
+	
+	var logValues = form.values;
+	
 	
 	$scope.timeOfDay = getTimeofDay($scope.logFields);
-	console.log($scope.timeOfDay);
+	var timeOfDay = {}
 	if($scope.timeOfDay) {
 		if($scope.timeOfDay.meta_value && typeof $scope.timeOfDay.meta_value !== 'object'){
-			$scope.timeOfDay = JSON.parse($scope.timeOfDay.meta_value);
+			timeOfDay = JSON.parse($scope.timeOfDay.meta_value);
 		}else{
-			$scope.timeOfDay = $scope.timeOfDay.meta_value;
+			timeOfDay = $scope.timeOfDay.meta_value;
 		}
 	}
 	
@@ -373,6 +385,7 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 		}
 	}
 	
+	
 	function getTheDate(i){
 		var _start = global.camp.start_date;
 		var _end = global.camp.end_date;
@@ -390,24 +403,58 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 	var _length = global.camp._length;
 	
 	var output = {};
-	
-	if(_length>0){
-		var valueBlock = buildValueBlock($scope.logFields);		
-		// we need to insert the proper data into the proper date so that everything matches up.
-		for(i=1; i<=_length+1; i++){
-			if(!output[i]) { output[i] = {}; }
+	dayOutput_length = 0;
+	if(timeOfDay.options){
+		$t = 1;
+		$opt = timeOfDay.options;
+		$options = Object.keys($opt).length+1;
+		for($t=1; $t<$options; $t++){
+			if(!timeOfDay.options[$t].days) { timeOfDay.options[$t].days = {}; }
+			var tod = timeOfDay.options[$t].value;
 			
-			output[i].day = 'day'+i;
-			output[i].date = getTheDate((i));
-			output[i].value = valueBlock;
+			if(_length>0){
+				var valueBlock = buildValueBlock($scope.logFields);		
+				// we need to insert the proper data into the proper date so that everything matches up.
+				var day_values = {};
+				for(i=1; i<=_length+1; i++){
+					if(!output[i]) { output[i] = {}; }
+					var _date = getTheDate((i));
+					timeOfDay.options[$t].days[i] = {};
+					timeOfDay.options[$t].days[i].day = 'day'+i;
+					timeOfDay.options[$t].days[i].date = _date;
+					timeOfDay.options[$t].days[i].value = valueBlock;
+					
+					if(form.values){
+						var $v = 0;
+						var values = form.values;
+						var $values = Object.keys(values).length;
+						var user_values = {};
+						for(v = 0; v<$values; v++){
+							if(values[v].date){
+								if(values[v].date === _date && values[v].time_of_day === tod) {
+									user_values = values[v]._v;
+								}
+							}
+						}
+						
+						var $user_values = Object.keys(user_values).length;
+						if($user_values>0){
+							timeOfDay.options[$t].days[i].user_values = user_values;
+						}
+					}
+					
+					dayOutput_length++;
+				}
+			}
 		}
 	}
 	
+	
 	$scope.cur_i = 0;
-	
+	console.log(timeOfDay);
 	$scope.maxDAYS = global.camp._length-1;
-	
 	$scope.dayOutput = output;
+	$scope.timeOfDay = timeOfDay;
 	  $('#loading').hide();
 	  
 	$scope.setIntervalScope = function($index){
@@ -415,8 +462,15 @@ cvCont.controller('logBuilder', ['$scope', 'CV_Camper', '$stateParams', function
 		
 	};
 	
+	$scope.showValues = function($data){
+		console.log($data);
+		
+		return $data;	
+	};
+	
 	$scope.getIndex = function($data,$index){
-		$scope.cur_i = $index;	
+		$scope.cur_i = $index;
+		
 		return $data;	
 	};
 

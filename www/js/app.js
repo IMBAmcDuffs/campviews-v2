@@ -241,12 +241,11 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 	cache: false,
 	views: {
 		'menuContent' : {
-			cache: false,
 		    templateUrl: 'templates/campers.html',	
 			controller: 'MainCtrl',
 			resolve: { 
 				campData: getCampers,
-				otherData : getLogForms,	
+				otherData : function() { return {}; }	
 			}
 		},
 	},
@@ -258,11 +257,15 @@ cv.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 		'menuContent' : {
 		    templateUrl: 'templates/logSheet.html',	
 			controller: 'logBuilder',
-		},
+			resolve: { 
+				logForms : getLogForms,	
+			}
+	},
 	},
 	require: ['ionList', '^?$ionicScroll'],
   }).state('app.logForm', {
     url: '/logsheets/logform/:camper_id/:form_id/:time_of_day/:day',
+	cache: false,
 	views: {
 		'menuContent' : {
 		    templateUrl: 'templates/logForm.html',	

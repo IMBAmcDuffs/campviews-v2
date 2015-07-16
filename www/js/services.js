@@ -163,6 +163,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 		self.getLogForms = function(params) {
 		var deferred = $q.defer();
 		path = rawpath+'get_form/?access_token='+global.accessToken+'&camper_id='+params.camper_id+'&type=log&camp_id='+global.selectedCamp;
+		$('#loading').show();
 			if(self.logForms !== null){ 
 				deferred.resolve(self.logForms);
 			} else {
@@ -170,6 +171,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 					success(function(data, status, headers, config) {
 						self.logForms = data;
 						deferred.resolve(data);
+						$('#loading').hide();
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
