@@ -262,6 +262,10 @@ img {
 	padding:15px 0px;	
 }
 
+.camper_list_content .list {
+	width:100%;	
+}
+
 #loading {
 	display:none;
 	position:absolute;

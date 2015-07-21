@@ -82,8 +82,8 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 /* main controller unit */
 cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $timeout, $document, $location, campData, otherData) {
  "use strict";
-  if(campData.campers){
-	global.campers = campData.campers;  
+  if(campData){
+	global.campers = campData;  
   }else{
 		$location.path('/dashboard');
   }
@@ -95,6 +95,8 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
 	$scope.page = page = $location.$$path.replace('/','');
 	
 	$scope.URI = page;
+	
+	var $items = $scope.items;
 	
 	switch(page){
 		case 'campers':
@@ -111,7 +113,6 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
 		break;
 		case 'checkin':
 			$scope.page_title = 'Check In Forms - Select Camper';
-			var $items = $scope.items;
 			// lets apply our filters
 			var amount = $items.length;
 			for(var i=0;i<amount;i++){
@@ -138,9 +139,11 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
     var filterBarInstance;
 
     $scope.showFilterBar = function () {
+		
       filterBarInstance = $ionicFilterBar.show({
         items: $scope.items,
         update: function (filteredItems) {
+		console.log(filteredItems);
           $scope.items = filteredItems;
         },
       });

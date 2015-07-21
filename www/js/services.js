@@ -159,13 +159,30 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 			var deferred = $q.defer();
 			var camp_id = global.selectedCamp;
 			$('#loading').show();
-			path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id+'&only=campers';
+			var path = rawpath+'get_single_camp_data/?access_token='+global.accessToken+'&camp_id='+camp_id+'&only=campers';
 			
 				$http.get(path).
 					success(function(data, status, headers, config) {
-						self.campData = data;
-						deferred.resolve(data);
-						console.log('Campers from camp', data);
+						// lets make sure all the data is good to injest
+						var $campers = {};
+					
+						if(data.status === 'success'){
+							var campers = data.campers;
+							var _c = Object.keys(campers).length;
+							if( _c > 0){
+								var _i = 0;
+								for(var i=0; i<_c; i++){
+									if(typeof(campers[i]) === 'undefined'){
+										if(!campers[i].id){
+											delete campers[i];
+										}
+									}
+								}
+							}
+						}
+						self.campData = campers;
+						deferred.resolve(campers);
+						console.log('Campers from camp', $campers);
 						 $('#loading').hide();
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
@@ -173,7 +190,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 			
 				
 			return deferred.promise;
-		}
+		};
 		
 		self.getLogForms = function(params) {
 		var deferred = $q.defer();
