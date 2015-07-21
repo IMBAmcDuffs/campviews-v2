@@ -1,41 +1,39 @@
 <ion-view view-title="Check In - Camper Selected">
   <ion-content class="padding">
   	<div class="row">
-    	<div class="col">
+    	<div class="col col-75">
             <div class="checkin_title">
-                <h2 class="sub_title">Selected : <b> {{ camper.first_name }} {{ camper.last_name }} </b></h2>
-            </div>
-            
-            <div class="row">
-            	<div class="col">
-                	<img ng-src="{{ camper.thumbnail }}" width="100%" />
-                </div>
-                <div class="col col-75">
-                	<ul>
-                    	<li>Date of Birth: <b>{{ camper.dob }}</b></li>
-                    	<li>Gender: <b>{{ camper.gender }}</b></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="row">
-            	<button class="col button button-balanced">
-                	Take Photo
-                </button>
-            </div>
-        </div>
-    	<div class="col">
-            <div class="checkin_title">
-                <h2 class="sub_title">Checkin Forms</h2>
+                <h2 class="sub_title">Checkin Forms for {{camper.first_name}} {{camper.last_name}}</h2>
             </div>
              
-            <ion-list class="row list list-inset"> 
-                <ion-item ng-repeat="item in camper.checkins" class="col list_item {{ item.checked_in ? 'checked_in' : '' }}"  href="#/checkin/{{camper_id}}/{{item.id}}">
+            <ion-list class="row camper-checkin-buttons"> 
+                <ion-item ng-repeat="item in camper.checkins" class="item-divider item {{ item.checked_in ? 'checked_in' : '' }} {{ item.id == form_id ? 'item-balanced' : '' }}" id="form_{{item.id}}" href="#/checkin/{{camper_id}}/{{item.id}}">
                     <div class="list_item_title">
-                        <i class="{{ item.checked_in ? 'icon ion-checkmark-circled' : '' }}"> </i>{{item.name}}
+                        <i class="{{ item.checked_in ? 'icon ion-checkmark-circled' : '' }}"></i> {{item.name}}
                     </div>
                 </ion-item>
             </ion-list>
+            
+        </div>
+     	<div class="col col-25">
+            
+            
+            <ion-item class="item col selected_camper">
+            	<div class="image" ng-show="camper.thumbnail">
+                	<img ng-src="{{camper.thumbnail}}">
+    			</div>
+                <div class="image no-image" ng-show="!camper.thumbnail">
+                    <img ng-src="http://placehold.it/300x300">
+                </div>
+                <div class="camper_data">
+               	 	<p>Name: {{camper.first_name}} {{camper.last_name}}</p>
+                    <p>Date of Birth: {{camper.dob}}</p>
+                </div>
+                
+                <ion-item ng-href="#/checkin" class="item padding-vertical item-balanced">
+                  Change Camper
+                </ion-item>
+            </ion-item>
         </div>
      </div>
   </ion-content>

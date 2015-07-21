@@ -37,6 +37,7 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
   // This is the main controller for the whole app. This will pass globals and is part of the menu scope
   if(campData){
 	global.camp = campData.camp;
+	global.forms = campData.forms;
 	
 	var $current = localStorage.getItem('user_info');
 	global.userName = $current;	
@@ -83,10 +84,8 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateParams', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $timeout, $stateParams, $document, $location, campData, otherData) {
  "use strict";
   if(campData){
-	delete global.campers;
 	global.campers = campData;  
 	// make sure we remove any campers that come back undefined...
-	console.log(global.campers);
   }else{
 		$location.path('/dashboard');
   } 
@@ -135,7 +134,6 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateP
       filterBarInstance = $ionicFilterBar.show({
         items: $scope.items,
         update: function (filteredItems) {
-		console.log(filteredItems);
 		  $scope._c = Object.keys(filteredItems).length;
           $scope.items = filteredItems;
         },
@@ -254,7 +252,6 @@ cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$docume
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
 	
 	var camper = global.camper;
-	
 	var form = CV_Forms.getCachedForm($stateParams.form_id); 
 	
 	$scope.camper = camper; 

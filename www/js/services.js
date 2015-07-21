@@ -244,15 +244,24 @@ cvServ.factory('CV_Forms', ['$http', '$q', '$location', '$ionicPopup', function(
 		self.checkinForms = null;
 		self.checkinData = null;
 		
+		self.form = {};
+		
 		self.getCachedForm = function(form_id) {
 			
-			var forms = global.camp.checkin;
-			if(forms.length>0){
-				for(i=0; i<forms.length; i++) {
-					if(form_id == forms[i].id)
-						return self.forms = forms[i];
-				} 
+			var forms = global.camper.checkins;
+			if(typeof(forms) === 'object'){
+			var _f = Object.keys(forms).length;
+				if(_f>0){
+					for(i=0; i<_f; i++) {
+						if(form_id === forms[i].id){
+							self.form = forms[i];
+							
+							return self.form;
+						}
+					} 
+				}
 			}
+			return false;
 		}; 
 		
 		self.getCheckinValues = function(form_id,camper_id) {
@@ -366,12 +375,6 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 				for(i=0; i<_c; i++) {
 					if(typeof(campers[i]) !== "undefined") {
 						
-						console.log(
-							camper_id,
-							campers[i].id,
-							typeof(campers[i].id),
-							Object.keys(campers[i]).length
-						);
 					if(camper_id === campers[i].id) {
 							global.camper = self.camper = campers[i];
 							return self.camper;
