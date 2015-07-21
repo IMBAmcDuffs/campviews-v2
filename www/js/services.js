@@ -125,7 +125,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 	function CV_Camps() {
 		var self = this;
 		
-		self.camps = null;
+		self.camps = {};
 		
 		self.campData = null;
 		
@@ -138,13 +138,15 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 		$('#loading').show();
 		path = rawpath+'get_all/?access_token='+global.accessToken;
 			
-			if(self.camps !== null){ 
+			if(self.camps.length>0){ 
+				$('#loading').hide();
 				deferred.resolve(self.camps);
 			} else {
 				$http.get(path).
 					success(function(data, status, headers, config) {
 						self.camps = data;
 						deferred.resolve(data);
+						console.log('All Campers from camp', data);
 						$('#loading').hide();
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
@@ -163,6 +165,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 					success(function(data, status, headers, config) {
 						self.campData = data;
 						deferred.resolve(data);
+						console.log('Campers from camp', data);
 						 $('#loading').hide();
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
@@ -198,7 +201,8 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 					success(function(data, status, headers, config) {
 						self.campData = data;
 						deferred.resolve(data);
-						
+							console.log('The Camp', data);
+					
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
 					});		
@@ -338,17 +342,27 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 		self.getCachedCamper = function(camper_id) {
 			
 		var deferred = $q.defer();
-		
-			var campers = global.campers;
-			if(campers.length>0){
-				for(i=0; i<campers.length; i++) {
-					if(camper_id == campers[i].id){
+		var campers = global.campers;
+		var _c = Object.keys(campers).length;
+		camper_id = parseInt(camper_id);
+			if(campers.length>0 && typeof(camper_id) === "number"){
+				for(i=0; i<_c; i++) {
+					if(typeof(campers[i]) !== "undefined") {
 						
-						return global.camper = self.camper = campers[i];
+						console.log(
+							camper_id,
+							campers[i].id,
+							typeof(campers[i].id),
+							Object.keys(campers[i]).length
+						);
+					if(camper_id === campers[i].id) {
+							global.camper = self.camper = campers[i];
+							return self.camper;
+						}
 					}
 				}
 			}
-		}
+		};
 		
 		self.uploadImage = function(image, camper) {
 			var deferred = $q.defer();
@@ -360,7 +374,7 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 			if(camper_id>0 && image_data){
 				$http.post(path)
 					.success(function(data, status, headers, config) {
-						if(data.result == 'success'){
+						if(data.result === 'success'){
 							// do success on upload here
 						}else{
 							// do fail here	
@@ -369,7 +383,7 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 						deferred.reject('Error happened yo!');
 					});		
 			}
-		}
+		};
 		
 		self.getCamper = function(params) {
 		var deferred = $q.defer();
@@ -394,7 +408,7 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 					success(function(data, status, headers, config) {
 						var _data = {};
 						
-						if(data.status = 'success'){
+						if(data.status === 'success'){
 							_data = {
 								'id' : data.camper.id,	
 								'first_name' : data.camper.camper_first_name,	
@@ -402,7 +416,7 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 								'thumbnail' : data.camper.thumbnail,	
 								'dob' : data.camper.camper_dob,	
 								'gender' : data.camper.camper_gender,	
-							}
+							};
 						}
 						
 						self.camper = _data;
@@ -414,7 +428,7 @@ cvServ.factory('CV_Camper', ['$http', '$q', function($http, $q) {
 			} 
 			
 			return deferred.promise;
-		}
+		};
 						
 	}
 	
@@ -439,13 +453,13 @@ cvServ.factory('CV_Account', ['$http','$location','$ionicPopup', function($http,
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded' 	
 				} 
-			}
+			};
 			
 			$http(req).
 			then(function(result) {
 				console.log(result.data);
 				console.log('factory - account');
-				if(result.data.status == 'success'){
+				if(result.data.status === 'success'){
 					// save the user data and route the app to the camp selection
 					localStorage.setItem('user_login', result.data.key);
 					localStorage.setItem('user_info', $data.user_login);
@@ -480,13 +494,13 @@ cvServ.factory('CV_Account', ['$http','$location','$ionicPopup', function($http,
 			localStorage.removeItem('user_login');
 			localStorage.removeItem('user_info');
 		}
-	}
+	};
 	
 	return {
 		login : process_login,
 		logout : logout_user,
 		check : check_user
-	}
+	};
 	
 }]);
 

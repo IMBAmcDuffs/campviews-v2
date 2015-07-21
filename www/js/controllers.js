@@ -397,13 +397,16 @@ cvCont.controller('logBuilder', ['$scope', '$timeout', 'CV_Camper', '$stateParam
 			
 			if($options>0){
 				for(var $i=1; $i<=$options; $i++){
-					console.log($opt[$i]);
-					var optTime = $opt[$i].value.split(':');
-					var optN = optTime[1].split(' ');
-					optN = optN[1].toLowerCase();
-					
-					console.log(optTime);
-					console.log(optN);
+					if($opt[$i]){
+						console.log($opt[$i]);
+						var optTime = $opt[$i].value.split(':');
+						var optN = optTime[1].split(' ');
+						optN = optN[1].toLowerCase();
+						
+						optTime = optTime[0];
+						console.log(optTime);
+						console.log(optN);
+					}
 				}
 			}
 		}
