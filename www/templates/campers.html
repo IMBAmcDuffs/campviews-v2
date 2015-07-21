@@ -4,7 +4,7 @@
         	<h2 class="title" ng-click="showFilterBar()">  <i class=" icon ion-ios-search"></i> Search Campers</h2>
         </div>
         <ion-refresher pulling-icon="ion-arrow-down-b" on-refresh="refreshItems()">
-        </ion-refresher>
+        </ion-refresher> 
    	<div class="camper_list_content padding">
         <div class="filter_options button-bar" ng-show="page == 'checkin'">
         	<a class="button filter icon-left ion-ios-people {{ activeFilter=='everyone' || !activeFilter ? 'active' : '' }}" ng-click="filterResults('everyone')">Everyone</a>

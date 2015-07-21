@@ -112,7 +112,6 @@ img {
 	position:relative;
 }
  .filter_options {
-	margin-top:34px;
 	padding:0px;
 }
 .filter_options .button {
@@ -274,7 +273,9 @@ img {
 .selected_camper .camper_data {
 	padding:15px 0px;	
 }
-
+.search-button.bar {
+	position:relative;	
+}
 .camper_list_content .list {
 	width:100%;	
 	margin:0px;

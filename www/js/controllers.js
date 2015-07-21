@@ -149,6 +149,7 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateP
         filterBarInstance();
         filterBarInstance = null;
       }
+		$('.search-button.bar').show();
 
       $timeout(function () {
         loadItems();
@@ -157,22 +158,18 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateP
     };
 	
 	$scope.filterResults = function(type) {
+	$('#loading').show();
 	$scope.activeFilter = type;
 	  if(type){
+		$('.search-button.bar').hide();
 		var items = {};
 		var _items = global.campers;
 		var _c = Object.keys(_items).length;
 		var _i = 0;
 		switch(type){
 			case 'everyone':
-				if(_c > 0){
-					for(var i = 0; i < _c; i++){
-						if(typeof(_items[i]) !== 'undefined'){
-							items[_i] = _items[i];
-							_i++;
-						}
-					}
-				}
+				$('.search-button.bar').show();
+				items = _items;
 			break;	
 			case 'not_checked':
 				if(_c > 0){
@@ -183,7 +180,7 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateP
 								_i++;
 							}
 						}
-					}
+					} 
 				}
 			break;
 			case 'checking_in':
@@ -217,6 +214,7 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateP
 		$scope._c = Object.keys(items).length;
 
  		$scope.items = items;
+		$('#loading').hide();
 	  }
 	};
 	
