@@ -105,6 +105,19 @@ img {
 	margin-bottom:10px;
 	position:relative;
 }
+.results-info {
+	text-align:center;
+	float:left;
+	width:100%;
+	position:relative;
+}
+ .filter_options {
+	margin-top:34px;
+	padding:0px;
+}
+.filter_options .button {
+	cursor:pointer;
+}
 
 .list_item {
 	float:left;
@@ -264,6 +277,7 @@ img {
 
 .camper_list_content .list {
 	width:100%;	
+	margin:0px;
 }
 
 #loading {

@@ -80,13 +80,18 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 });
 
 /* main controller unit */
-cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $timeout, $document, $location, campData, otherData) {
+cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$stateParams', '$document', '$location', 'campData', 'otherData', function($scope, $ionicFilterBar, $timeout, $stateParams, $document, $location, campData, otherData) {
  "use strict";
   if(campData){
+	delete global.campers;
 	global.campers = campData;  
+	// make sure we remove any campers that come back undefined...
+	console.log(global.campers);
   }else{
 		$location.path('/dashboard');
-  }
+  } 
+  
+  $scope.activeFilter = false;
   
   function loadItems() {
 	$scope.global = global;
@@ -97,6 +102,7 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
 	$scope.URI = page;
 	
 	var $items = $scope.items;
+	
 	
 	switch(page){
 		case 'campers':
@@ -114,26 +120,12 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
 		case 'checkin':
 			$scope.page_title = 'Check In Forms - Select Camper';
 			// lets apply our filters
-			var amount = $items.length;
-			for(var i=0;i<amount;i++){
-				var forms = $items[i].checkins.length - 1;
-				var checkedIn = $items[i].checked_in;
-				if(checkedIn === forms){ 
-					delete $items[i];
-				}
-			}
-			
-		  if(otherData){
-			  if(otherData.forms){
-				if(global.camp)
-					global.camp.checkin = otherData.forms; 
-			  }
-			
-		  }
 			$scope.items = $items;
 		break;	
 	}
+	$scope._c = Object.keys($scope.items).length;
   }
+  
   loadItems();
 		
     var filterBarInstance;
@@ -144,6 +136,7 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
         items: $scope.items,
         update: function (filteredItems) {
 		console.log(filteredItems);
+		  $scope._c = Object.keys(filteredItems).length;
           $scope.items = filteredItems;
         },
       });
@@ -163,7 +156,72 @@ cvCont.controller('MainCtrl', ['$scope', '$ionicFilterBar', '$timeout', '$docume
       }, 1000);
     };
 	
+	$scope.filterResults = function(type) {
+	$scope.activeFilter = type;
+	  if(type){
+		var items = {};
+		var _items = global.campers;
+		var _c = Object.keys(_items).length;
+		var _i = 0;
+		switch(type){
+			case 'everyone':
+				if(_c > 0){
+					for(var i = 0; i < _c; i++){
+						if(typeof(_items[i]) !== 'undefined'){
+							items[_i] = _items[i];
+							_i++;
+						}
+					}
+				}
+			break;	
+			case 'not_checked':
+				if(_c > 0){
+					for(var i = 0; i < _c; i++){
+						if(typeof(_items[i]) !== 'undefined'){
+							if(_items[i].checked_in < 1) {
+								items[_i] = _items[i];
+								_i++;
+							}
+						}
+					}
+				}
+			break;
+			case 'checking_in':
+				if(_c > 0){
+					for(var i = 0; i < _c; i++){
+						if(typeof(_items[i]) !== 'undefined'){
+							var checked_in = Object.keys(_items[i].checkins).length;
+							if(_items[i].checked_in > 0 && _items[i].checked_in < checked_in) {
+								items[_i] = _items[i];
+								_i++;
+							}
+						}
+					}
+				}
+			break;
+			case 'checked_in':
+				if(_c > 0){
+					for(var i = 0; i < _c; i++){
+						if(typeof(_items[i]) !== 'undefined'){
+							var checked_in = Object.keys(_items[i].checkins).length;
+							if(_items[i].checked_in === checked_in) {
+								items[_i] = _items[i];
+								_i++;
+							}
+						}
+					}
+				}
+			break;
+		}
+		
+		$scope._c = Object.keys(items).length;
+
+ 		$scope.items = items;
+	  }
+	};
 	
+	
+  
 	$scope.aftertitle = '';
 	
 }]);

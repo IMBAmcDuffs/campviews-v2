@@ -182,7 +182,7 @@ cvServ.factory('CV_Camps', ['$http', '$q', '$injector', function($http, $q, $inj
 						}
 						self.campData = campers;
 						deferred.resolve(campers);
-						console.log('Campers from camp', $campers);
+						console.log('Campers from camp', campers);
 						 $('#loading').hide();
 					}).error(function(data, status, headers, config) {
 						deferred.reject('Error happened yo!');
