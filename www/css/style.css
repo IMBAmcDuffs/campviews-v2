@@ -77,6 +77,7 @@ img {
 
 .day-user-toggle {
 	height:53px;	
+	overflow:hidden;
 }
 
 .day-user-toggle::before {

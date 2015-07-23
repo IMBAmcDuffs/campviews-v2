@@ -229,6 +229,30 @@ cvCont.controller('checkinForms', ['$scope', '$document', '$stateParams', '$loca
 		$scope.camper_id = $stateParams.camper_id;
 	}
 	
+	$scope.takePicture = function() {
+		console.log('test pic');
+        var options = { 
+            quality : 75, 
+            destinationType : Camera.DestinationType.DATA_URL, 
+            sourceType : Camera.PictureSourceType.CAMERA, 
+            allowEdit : true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 300,
+            targetHeight: 300,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+ 
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            var imgURI = "data:image/jpeg;base64," + imageData;
+			
+			CV_Camper.uploadImage(imgURI,$stateParams.camper_id);
+			
+        }, function(err) {
+            // An error occured. Show a message to the user
+        });
+    };
+
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
   $('#loading').hide();
 	
@@ -260,29 +284,6 @@ cvCont.controller('checkinForm', ['$scope', '$cordovaCamera', '$state', '$docume
 	$scope.camper_id = $stateParams.camper_id;
 	$scope.camp_id = global.selectedCamp;
 	
-	$scope.takePicture = function() {
-		console.log('test pic');
-        var options = { 
-            quality : 75, 
-            destinationType : Camera.DestinationType.DATA_URL, 
-            sourceType : Camera.PictureSourceType.CAMERA, 
-            allowEdit : true,
-            encodingType: Camera.EncodingType.JPEG,
-            targetWidth: 300,
-            targetHeight: 300,
-            popoverOptions: CameraPopoverOptions,
-            saveToPhotoAlbum: false
-        };
- 
-        $cordovaCamera.getPicture(options).then(function(imageData) {
-            var imgURI = "data:image/jpeg;base64," + imageData;
-			
-			CV_Camper.uploadImage(imgURI,$stateParams.camper_id);
-			
-        }, function(err) {
-            // An error occured. Show a message to the user
-        });
-    };
 	
 	$scope.saveForm = function(form) {
 		var results = CV_Forms.saveForm(form);

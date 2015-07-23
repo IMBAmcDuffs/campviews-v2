@@ -24,6 +24,7 @@
                         	<div class="day-user-value" ng-repeat="user_value in day.user_values">
                             	<b>{{user_value.label}}</b>: {{user_value.value}}
                             </div>
+                            <div class="button button-positive"><a href="#/logsheets/logform/{{camper_id}}/{{logForm.id}}/{{option.value}}/{{day.date}}">Tap to edit</a></div>
                         </ion-item>
                         <ion-item ng-show="!day.user_values" href="#/logsheets/logform/{{camper_id}}/{{logForm.id}}/{{option.value}}/{{day.date}}">
                             <span class="day-value no-value">Tap to add</span>
