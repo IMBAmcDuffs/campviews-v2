@@ -231,7 +231,7 @@ cvCont.controller('checkinForms', ['$scope', '$document', '$stateParams', '$loca
 	
 	$scope.takePicture = function() {
 		console.log('test pic');
-        var options = { 
+        var cameraOptions = { 
             quality : 75, 
             destinationType : Camera.DestinationType.DATA_URL, 
             sourceType : Camera.PictureSourceType.CAMERA, 
@@ -243,15 +243,17 @@ cvCont.controller('checkinForms', ['$scope', '$document', '$stateParams', '$loca
             saveToPhotoAlbum: false
         };
  
-        $cordovaCamera.getPicture(options).then(function(imageData) {
-            var imgURI = "data:image/jpeg;base64," + imageData;
-			
-			CV_Camper.uploadImage(imgURI,$stateParams.camper_id);
-			
-        }, function(err) {
-            // An error occured. Show a message to the user
-        });
-    };
+		navigator.camera.getPicture(function(imageURI) {
+		
+			// imageURI is the URL of the image that we can use for
+			// an <img> element or backgroundImage.
+		
+		  }, function(err) {
+		
+			// Ruh-roh, something bad happened
+		
+		  }, cameraOptions);
+      };
 
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
   $('#loading').hide();
