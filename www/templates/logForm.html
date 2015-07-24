@@ -12,6 +12,7 @@
                     <ion-item ng-controller="formBuilder" ng-repeat="field in form.fields" class="form_list_item list" id="form_input_{{field.id}}" ng-model="checkinData" ng-bind-html="fieldHTML">
                     </ion-item>
                     <ion-item>
+                    	<input name="cv_user_id" id="user_id" type="hidden" value="{{user_id}}" />
                     	<input name="cv_camp_id" id="camp_id" type="hidden" value="{{camp_id}}" />
                     	<input name="cv_camper_id"  id="camper_id" type="hidden" value="{{camper_id}}" />
                     	<input name="cv_form_id"  id="form_id" type="hidden" value="{{form_id}}" />

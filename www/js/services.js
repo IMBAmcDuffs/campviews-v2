@@ -483,8 +483,8 @@ cvServ.factory('CV_Account', ['$http','$location','$ionicPopup', function($http,
 					// save the user data and route the app to the camp selection
 					localStorage.setItem('user_login', result.data.key);
 					localStorage.setItem('user_info', $data.user_login);
-					console.log(localStorage.getItem('user_login'));
-					console.log('factory - loggedin');
+					global.userData = result.data.user;
+					console.log(global.userID);
 					check_user();
 				}else{
 					// build error handlers	

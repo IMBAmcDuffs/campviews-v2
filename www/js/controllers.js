@@ -41,7 +41,9 @@ cvCont.controller('AppCtrl', function($scope, $ionicHistory, $ionicModal, $locat
 	
 	var $current = localStorage.getItem('user_info');
 	global.userName = $current;	
-	
+	if(global.userData.data.user_nicename){
+		global.userName = global.userData.data.user_nicename;	
+	}
 	$scope.global = global;	
   
 	console.log('AppCtrl');
@@ -229,34 +231,10 @@ cvCont.controller('checkinForms', ['$scope', '$document', '$stateParams', '$loca
 		$scope.camper_id = $stateParams.camper_id;
 	}
 	
-	$scope.takePicture = function() {
-		console.log('test pic');
-        var cameraOptions = { 
-            quality : 75, 
-            destinationType : Camera.DestinationType.DATA_URL, 
-            sourceType : Camera.PictureSourceType.CAMERA, 
-            allowEdit : true,
-            encodingType: Camera.EncodingType.JPEG,
-            targetWidth: 300,
-            targetHeight: 300,
-            popoverOptions: CameraPopoverOptions,
-            saveToPhotoAlbum: false
-        };
- 
-		navigator.camera.getPicture(function(imageURI) {
-		
-			// imageURI is the URL of the image that we can use for
-			// an <img> element or backgroundImage.
-		
-		  }, function(err) {
-		
-			// Ruh-roh, something bad happened
-		
-		  }, cameraOptions);
-      };
+	$scope.takePicture = function() {};
 
 	CV_Camper.getCachedCamper($stateParams.camper_id); 
-  $('#loading').hide();
+  	$('#loading').hide();
 	
 	$scope.camper = global.camper;
  	
@@ -319,7 +297,7 @@ cvCont.controller('logForm', ['$scope', '$cordovaCamera', '$state', '$document',
 	  }
 
 	var form = logForms.forms[0]; 
-	
+	console.log(global);
 
 	$scope.camper = camper; 
 	$scope.form = form; 
@@ -328,6 +306,7 @@ cvCont.controller('logForm', ['$scope', '$cordovaCamera', '$state', '$document',
 	$scope.form_id = $stateParams.form_id;
 	$scope.time_of_day = $stateParams.time_of_day;
 	$scope.date = $stateParams.day;
+	$scope.user_id = global.userData.ID;
 	
 	
 		
